@@ -11,5 +11,4 @@ local.db
 instance/
 migrations/__pycache__/
 
-app/static/uploads/*
-!app/static/uploads/.gitkeep
+app/static/uploads/.gitkeep
