@@ -1,0 +1,53 @@
+<!-- [수정] 2026-02-18: 관리자 대시보드 페이지 추가 -->
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+<section class="section-block">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <div>
+        <p class="eyebrow mb-1">Admin Dashboard</p>
+        <h1 class="section-title mb-0">운영 현황</h1>
+      </div>
+      <a class="btn btn-premium-ghost" href="{{ url_for('admin.logout') }}">로그아웃</a>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="panel-card h-100 text-center">
+          <p class="metric-value mb-1">{{ summary.new_inquiries }}</p>
+          <p class="metric-label mb-0">신규 상담</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel-card h-100 text-center">
+          <p class="metric-value mb-1">{{ summary.total_inquiries }}</p>
+          <p class="metric-label mb-0">전체 상담</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel-card h-100 text-center">
+          <p class="metric-value mb-1">{{ summary.published_posts }}</p>
+          <p class="metric-label mb-0">발행 글</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel-card h-100 text-center">
+          <p class="metric-value mb-1">{{ summary.published_cases }}</p>
+          <p class="metric-label mb-0">발행 사례</p>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-4">
+        <a class="panel-link h-100" href="{{ url_for('admin.inquiries_list') }}">상담 관리</a>
+      </div>
+      <div class="col-md-4">
+        <a class="panel-link h-100" href="{{ url_for('admin.posts_list') }}">블로그 관리</a>
+      </div>
+      <div class="col-md-4">
+        <a class="panel-link h-100" href="{{ url_for('admin.cases_list') }}">성공사례 관리</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

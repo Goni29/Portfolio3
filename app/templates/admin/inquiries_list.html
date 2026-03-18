@@ -1,0 +1,72 @@
+<!-- [수정] 2026-02-18: 상담 목록/상태 필터 페이지 추가 -->
+{% extends "base.html" %}
+{% block title %}Inquiries | Admin{% endblock %}
+{% block content %}
+<section class="section-block">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <div>
+        <p class="eyebrow mb-1">Admin</p>
+        <h1 class="section-title mb-0">상담 관리</h1>
+      </div>
+      <a class="btn btn-premium-ghost" href="{{ url_for('admin.dashboard') }}">대시보드</a>
+    </div>
+
+    <div class="panel-card mb-3">
+      <form method="get" class="row g-2 align-items-end">
+        <div class="col-sm-4">
+          <label class="form-label">상태 필터</label>
+          <select name="status" class="form-select premium-input">
+            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>전체</option>
+            {% for status in status_options %}
+            <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>
+              {{ inquiry_status_labels.get(status, status) }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-auto">
+          <button class="btn btn-premium-primary" type="submit">적용</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-card p-0 overflow-auto">
+      <table class="table table-dark table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>연락처</th>
+            <th>분야</th>
+            <th>상태</th>
+            <th>접수일</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if inquiries %}
+            {% for inquiry in inquiries %}
+            <tr>
+              <td>{{ inquiry.id }}</td>
+              <td>{{ inquiry.name }}</td>
+              <td>{{ inquiry.phone }}</td>
+              <td>{{ inquiry.category }}</td>
+              <td>{{ inquiry_status_labels.get(inquiry.status, inquiry.status) }}</td>
+              <td>{{ inquiry.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td class="text-end">
+                <a class="btn btn-sm btn-premium-ghost" href="{{ url_for('admin.inquiry_detail', inquiry_id=inquiry.id) }}">상세</a>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" class="text-center muted-text py-4">조회된 상담이 없습니다.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

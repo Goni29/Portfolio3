@@ -1,0 +1,203 @@
+﻿<!-- [수정] 2026-02-19: 변호사 상세 페이지를 Hero+3카드+선택 상세+매칭+CTA 구조로 전면 개편 -->
+<!-- [수정] 2026-02-20: 상세 페이지 내 상담 유도 과다 노출 완화를 위해 카드/하단 상담 영역 축소 -->
+{% extends "base.html" %}
+{% block title %}Attorneys | {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+{% set detail_tabs = attorneys_page_settings.detail_tabs|default([], true) %}
+{% set hero_people = attorneys_profiles[:3] %}
+<!-- [수정] 2026-02-19: Hero 인물은 김서윤 변호사를 중앙에 고정하고 3명 모두 동일 비중으로 노출 -->
+{% set center_candidates = hero_people|selectattr('slug', 'equalto', 'kim-seoyun')|list %}
+{% set center_attorney = center_candidates[0] if center_candidates else (hero_people[1] if hero_people|length > 1 else (hero_people[0] if hero_people else none)) %}
+{% set center_slug = center_attorney.slug if center_attorney else '' %}
+{% set side_attorneys = hero_people|rejectattr('slug', 'equalto', center_slug)|list %}
+<section class="section-block attorney-team-page">
+  <div class="container">
+    <div class="attorney-team-hero">
+      <div class="attorney-team-hero-copy">
+        <p class="eyebrow mb-2">Attorneys Team</p>
+        <h1 class="section-title mb-3">{{ attorneys_page_settings.hero_title }}</h1>
+        <p class="card-text mb-0">{{ attorneys_page_settings.hero_message }}</p>
+      </div>
+      <div class="attorney-team-hero-visual" aria-hidden="true">
+        {% if side_attorneys|length > 0 %}
+        <figure class="attorney-team-silhouette is-left">
+          {% if side_attorneys[0].image %}
+          <img src="{{ url_for('static', filename=side_attorneys[0].image) }}" alt="" loading="lazy">
+          {% else %}
+          <span class="attorney-team-silhouette-line"></span>
+          {% endif %}
+        </figure>
+        {% endif %}
+
+        {% if center_attorney %}
+        <figure class="attorney-team-silhouette is-center">
+          {% if center_attorney.image %}
+          <img src="{{ url_for('static', filename=center_attorney.image) }}" alt="" loading="lazy">
+          {% else %}
+          <span class="attorney-team-silhouette-line"></span>
+          {% endif %}
+        </figure>
+        {% endif %}
+
+        {% if side_attorneys|length > 1 %}
+        <figure class="attorney-team-silhouette is-right">
+          {% if side_attorneys[1].image %}
+          <img src="{{ url_for('static', filename=side_attorneys[1].image) }}" alt="" loading="lazy">
+          {% else %}
+          <span class="attorney-team-silhouette-line"></span>
+          {% endif %}
+        </figure>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="attorney-hero-metrics" role="list" aria-label="신뢰 지표">
+      {% for metric in attorneys_page_settings.hero_metrics %}
+      <div class="attorney-hero-metric" role="listitem">
+        <i class="bi {{ metric.icon }}" aria-hidden="true"></i>
+        <span>{{ metric.label }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- [수정] 2026-02-20: 메인페이지에서 특정 변호사 카드로 이동할 수 있도록 앵커 추가 -->
+<section id="attorney-card-anchor" class="section-block pt-0 attorney-team-page">
+  <div class="container">
+    <div class="section-header attorney-grid-header">
+      <p class="eyebrow mb-2">Selection</p>
+      <h2 class="section-title mb-2">{{ attorneys_page_settings.grid_title }}</h2>
+      <p class="card-text mb-0">{{ attorneys_page_settings.grid_subtitle }}</p>
+    </div>
+
+    <div class="attorney-card-grid has-active" data-attorney-card-grid>
+      {% for attorney in attorneys_profiles %}
+      <article class="attorney-profile-card {% if loop.first %}is-selected{% endif %}" data-attorney-card="{{ attorney.slug }}" tabindex="0" aria-label="{{ attorney.name }} 변호사 카드">
+        <div class="attorney-profile-media">
+          {% if attorney.image %}
+          <img src="{{ url_for('static', filename=attorney.image) }}" alt="{{ attorney.name }} 변호사 프로필" loading="lazy">
+          {% endif %}
+        </div>
+
+        <p class="card-meta mb-1">{{ attorney.role }}</p>
+        <h3 class="card-title mb-2">{{ attorney.name }}</h3>
+
+        <div class="attorney-tag-list" aria-label="전문 분야 태그">
+          {% for tag in (attorney.tags|default([], true))[:3] %}
+          <span class="attorney-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+
+        <p class="attorney-headline mb-0">{{ attorney.headline }}</p>
+
+        <div class="attorney-card-actions">
+          <button type="button" class="btn btn-premium-ghost attorney-card-btn" data-attorney-select="{{ attorney.slug }}" data-scroll-target="attorney-detail-anchor">
+            {{ attorneys_page_settings.profile_button_label }}
+          </button>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="attorney-detail-anchor" class="section-block pt-0 attorney-team-page">
+  <div class="container">
+    <div class="section-header attorney-detail-header">
+      <p class="eyebrow mb-2">Profile</p>
+      <h2 class="section-title mb-2">{{ attorneys_page_settings.detail_title }}</h2>
+      <p class="card-text mb-0">{{ attorneys_page_settings.detail_subtitle }}</p>
+    </div>
+
+    <div class="attorney-detail-stack" data-attorney-detail-stack>
+      {% for attorney in attorneys_profiles %}
+      <article class="attorney-detail-panel {% if loop.first %}is-active{% endif %}" data-attorney-detail="{{ attorney.slug }}" aria-hidden="{{ 'false' if loop.first else 'true' }}">
+        <div class="attorney-detail-left">
+          <figure class="attorney-detail-image-wrap">
+            {% if attorney.image %}
+            <img src="{{ url_for('static', filename=attorney.image) }}" alt="{{ attorney.name }} 변호사 상세 프로필" loading="lazy">
+            {% endif %}
+          </figure>
+          <div class="attorney-badge-wrap">
+            {% for badge in attorney.badges|default([], true) %}
+            <span class="attorney-badge">{{ badge }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="attorney-detail-right">
+          <p class="card-meta mb-1">{{ attorney.role }}</p>
+          <h3 class="section-title attorney-detail-name">{{ attorney.name }}</h3>
+          <p class="card-text attorney-detail-summary">{{ attorney.description }}</p>
+
+          <div class="attorney-detail-tabs" role="tablist" aria-label="{{ attorney.name }} 상세 탭">
+            {% for tab in detail_tabs %}
+            <button type="button" class="attorney-tab-btn {% if loop.first %}is-active{% endif %}" data-tab-trigger="{{ tab.key }}" aria-selected="{{ 'true' if loop.first else 'false' }}">
+              {{ tab.label }}
+            </button>
+            {% endfor %}
+          </div>
+
+          <div class="attorney-tab-panels">
+            {% for tab in detail_tabs %}
+            <section class="attorney-tab-panel {% if loop.first %}is-active{% endif %}" data-tab-panel="{{ tab.key }}" aria-hidden="{{ 'false' if loop.first else 'true' }}">
+              {% if tab.key == 'career_timeline' %}
+              <ol class="attorney-timeline">
+                {% for record in attorney.career_timeline|default([], true) %}
+                <li class="attorney-timeline-item">
+                  <p class="attorney-timeline-year mb-0">{{ record.year }}</p>
+                  <p class="attorney-timeline-detail mb-0">{{ record.detail }}</p>
+                </li>
+                {% endfor %}
+              </ol>
+              {% elif tab.key == 'representative_cases' %}
+              <div class="attorney-case-cards">
+                {% for case_item in (attorney.representative_cases|default([], true))[:3] %}
+                <article class="attorney-case-card">
+                  <h4 class="attorney-case-title">{{ case_item.title }}</h4>
+                  <p class="attorney-case-summary mb-0">{{ case_item.summary }}</p>
+                </article>
+                {% endfor %}
+              </div>
+              <a class="link-gold attorney-case-link" href="{{ url_for('public.cases') }}">성공사례 더 보기</a>
+              {% else %}
+              <ul class="attorney-detail-list">
+                {% for item in attorney.get(tab.key, []) %}
+                <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </section>
+            {% endfor %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-block pt-0 attorney-team-page">
+  <div class="container">
+    <div class="section-header attorney-matching-header">
+      <p class="eyebrow mb-2">Case Matching</p>
+      <h2 class="section-title mb-2">내 사건에 맞는 변호사 추천</h2>
+      <p class="card-text mb-0">상황을 누르면 해당 변호사 프로필로 바로 이동합니다.</p>
+    </div>
+
+    <div class="attorney-matching-grid">
+      {% for match in attorney_matching_rules %}
+      <button type="button" class="attorney-match-item" data-attorney-select="{{ match.recommended_slug }}" data-scroll-target="attorney-detail-anchor">
+        <span class="attorney-match-check" aria-hidden="true">✓</span>
+        <span class="attorney-match-case">{{ match.case_hint }}</span>
+        <span class="attorney-match-arrow" aria-hidden="true">→</span>
+        <span class="attorney-match-result">{{ match.recommended_text }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- [수정] 2026-02-20: 상세 페이지 내 상담 유도 과다 노출 완화를 위해 하단 상담 폼 섹션 제거 -->
+{% endblock %}

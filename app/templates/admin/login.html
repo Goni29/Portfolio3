@@ -1,0 +1,39 @@
+<!-- [수정] 2026-02-18: 관리자 로그인 페이지 추가 -->
+{% extends "base.html" %}
+{% block title %}Admin Login | {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+<section class="section-block">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="panel-card">
+          <p class="eyebrow mb-2">Admin</p>
+          <h1 class="section-title mb-4">관리자 로그인</h1>
+          <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+              <label class="form-label">{{ form.email.label.text }}</label>
+              {{ form.email(class="form-control premium-input") }}
+              {% for error in form.email.errors %}
+                <div class="form-error">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ form.password.label.text }}</label>
+              {{ form.password(class="form-control premium-input") }}
+              {% for error in form.password.errors %}
+                <div class="form-error">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <div class="form-check mb-4">
+              {{ form.remember(class="form-check-input") }}
+              <label class="form-check-label">{{ form.remember.label.text }}</label>
+            </div>
+            {{ form.submit(class="btn btn-premium-primary w-100") }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

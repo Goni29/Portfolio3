@@ -1,0 +1,4082 @@
+﻿/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+:root {
+  --bg-main: #090f1b;
+  --bg-panel: #121c2d;
+  --bg-panel-soft: #172338;
+  --text-main: #f4f6fb;
+  --text-muted: #b3bccd;
+  --line-gold: #d8c08a;
+  --line-soft: rgba(216, 192, 138, 0.28);
+  --line-subtle: rgba(255, 255, 255, 0.12);
+  --font-title: "Asta Sans", "Noto Sans KR", sans-serif;
+  --font-body: "Asta Sans", "Noto Sans KR", sans-serif;
+  --site-header-height: 0px;
+  /* [수정] 2026-02-20: Hero 비디오 크롭 최소화를 위한 플랫폼별 기본 변수(PC 기준) */
+  --hero-video-scale: 1.03;
+  --hero-video-focus-x: 50%;
+  --hero-video-focus-y: 36%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* [수정] 2026-02-19: 태블릿/모바일에서 좌우 터치 스크롤을 차단해 세로 스크롤만 허용 */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body.app-body {
+  background: radial-gradient(circle at 85% 10%, rgba(216, 192, 138, 0.08), transparent 30%),
+    radial-gradient(circle at 10% 90%, rgba(124, 147, 188, 0.1), transparent 32%),
+    var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-style: normal;
+  line-height: 1.68;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+/* [수정] 2026-02-19: 프레임/절대배치 요소로 인한 가로 넘침을 메인 영역에서 추가 차단 */
+body.app-body main {
+  overflow-x: clip;
+}
+
+/* [수정] 2026-02-19: 홈 전체에 군데군데 퍼지는 자연스러운 다중 그라데이션을 적용 */
+.public-layout.home-page main {
+  position: relative;
+  isolation: isolate;
+}
+
+.public-layout.home-page main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* [수정] 2026-02-19: 메인페이지 전역 다중 그라데이션 원본 톤으로 복구 */
+    radial-gradient(56rem 34rem at 12% 16%, rgba(216, 192, 138, 0.11), transparent 72%),
+    /* [수정] 2026-02-21: 상담 진행 절차 왼쪽 영역을 큰 원 하나 형태의 골드 그라데이션으로 단순화 */
+    radial-gradient(circle 70rem at 4% 82%, rgba(216, 186, 126, 0.25), transparent 72%),
+    radial-gradient(46rem 32rem at 86% 12%, rgba(124, 147, 188, 0.1), transparent 74%),
+    radial-gradient(58rem 38rem at 74% 46%, rgba(216, 164, 96, 0.1), transparent 74%),
+    radial-gradient(44rem 32rem at 22% 74%, rgba(94, 118, 162, 0.08), transparent 76%),
+    radial-gradient(40rem 28rem at 88% 86%, rgba(216, 174, 108, 0.08), transparent 72%),
+    linear-gradient(180deg, rgba(9, 15, 27, 0.05), rgba(9, 15, 27, 0.14) 44%, rgba(9, 15, 27, 0.06));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.public-layout.home-page main::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 205, 140, 0.06) 1px, transparent 1.3px),
+    radial-gradient(circle, rgba(255, 205, 140, 0.03) 1px, transparent 1.3px);
+  background-size: 64px 64px, 42px 42px;
+  background-position: 0 0, 20px 14px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.public-layout.home-page main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line-soft);
+  background-color: rgba(9, 15, 27, 0.82);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.site-title {
+  font-family: var(--font-title);
+  color: var(--text-main);
+  letter-spacing: 0.02em;
+}
+
+.navbar .nav-link {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: var(--line-gold);
+}
+
+.section-block {
+  padding: 4.8rem 0;
+}
+
+.section-header {
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.45rem;
+}
+
+.hero-section {
+  /* [수정] 2026-02-20: 사용자 요청에 따라 Hero 높이는 기존 100svh 기준으로 유지 */
+  min-height: calc(100svh - var(--site-header-height));
+  /* [수정] 2026-02-19: Hero 배경 비디오 레이어를 위해 상대 배치/클리핑 적용 */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* [수정] 2026-02-19: Hero 배경 비디오를 섹션 전체에 채우고 비율 유지 */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* [수정] 2026-02-20: 플랫폼별 피사체 초점값과 스케일을 변수로 제어 */
+  object-position: var(--hero-video-focus-x) var(--hero-video-focus-y);
+  transform: scale(var(--hero-video-scale));
+  transform-origin: center center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* [수정] 2026-02-19: 비디오 위 명암 오버레이로 텍스트 대비 확보 */
+.hero-video-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+      to bottom,
+      rgba(4, 10, 20, 0.52) 0%,
+      rgba(4, 10, 20, 0.62) 42%,
+      rgba(4, 10, 20, 0.76) 100%
+    ),
+    radial-gradient(circle at 50% 26%, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.36));
+  pointer-events: none;
+}
+
+/* [수정] 2026-02-19: Hero 콘텐츠가 비디오/오버레이 위에서 안정적으로 보이도록 레이어 순서 보정 */
+.hero-section > .container {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  color: var(--line-gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.2rem, 6.5vw, 3.9rem);
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2.1vw, 1.24rem);
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.5rem, 4vw, 2.35rem);
+}
+
+.panel-card {
+  background: linear-gradient(180deg, var(--bg-panel), var(--bg-panel-soft));
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 1.3rem;
+}
+
+.panel-subtle {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.9rem;
+}
+
+.panel-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: var(--text-main);
+  background: linear-gradient(180deg, var(--bg-panel), var(--bg-panel-soft));
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  min-height: 86px;
+  padding: 1rem 1.15rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.panel-link::after {
+  content: "->";
+  color: var(--line-gold);
+  font-size: 0.82rem;
+}
+
+.panel-link:hover {
+  color: var(--line-gold);
+  border-color: rgba(216, 192, 138, 0.55);
+}
+
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.trust-item {
+  text-align: center;
+}
+
+.line-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.result-inline {
+  color: var(--line-gold);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.process-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.step-number {
+  color: var(--line-gold);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.07em;
+  margin-top: 0.2rem;
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  margin-bottom: 0.45rem;
+}
+
+.card-text,
+.muted-text,
+.metric-label,
+.footer-text,
+.footer-copy {
+  color: var(--text-muted);
+}
+
+.card-meta {
+  color: var(--line-gold);
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text-main);
+  margin-bottom: 0.1rem;
+}
+
+.result-chip {
+  display: inline-block;
+  color: var(--line-gold);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.cta-banner {
+  background: linear-gradient(125deg, rgba(216, 192, 138, 0.09), rgba(18, 28, 45, 1));
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  padding: 2rem;
+}
+
+.btn-premium-primary {
+  border: 1px solid var(--line-gold);
+  color: var(--line-gold);
+  background: transparent;
+}
+
+.btn-premium-primary:hover,
+.btn-premium-primary:focus {
+  color: #111826;
+  background: var(--line-gold);
+  border-color: var(--line-gold);
+}
+
+.btn-premium-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--text-main);
+  background: transparent;
+}
+
+.btn-premium-ghost:hover,
+.btn-premium-ghost:focus {
+  border-color: #ffffff;
+  color: #0f1728;
+  background: #ffffff;
+}
+
+.premium-input {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-main);
+}
+
+.premium-input:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--line-gold);
+  box-shadow: 0 0 0 0.2rem rgba(216, 192, 138, 0.18);
+  color: var(--text-main);
+}
+
+.premium-input option {
+  background-color: #121c2d;
+}
+
+.form-label,
+.form-check-label {
+  color: #d6dcec;
+}
+
+.form-error {
+  color: #ffb4b4;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+/* [수정] 2026-02-20: 온라인 상담 페이지를 Hero + 글래스 폼 + 플로팅 라벨 UI로 업그레이드 */
+.public-layout .consult-page {
+  position: relative;
+}
+
+.public-layout .consult-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60rem 26rem at 18% 14%, rgba(216, 176, 108, 0.12), transparent 74%),
+    radial-gradient(56rem 30rem at 82% 40%, rgba(124, 147, 188, 0.08), transparent 78%);
+  pointer-events: none;
+}
+
+.public-layout .consult-page > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.public-layout .consult-hero {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.public-layout .consult-title {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.public-layout .consult-subtitle {
+  color: rgba(238, 239, 241, 0.96);
+  font-size: clamp(1.05rem, 0.5vw + 0.92rem, 1.22rem);
+  line-height: 1.6;
+}
+
+.public-layout .consult-reply-note {
+  color: rgba(200, 206, 217, 0.95);
+  font-size: clamp(0.92rem, 0.3vw + 0.84rem, 1rem);
+}
+
+.public-layout .consult-trust-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.public-layout .consult-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.46rem;
+  padding: 0.36rem 0.7rem;
+  border: 1px solid rgba(216, 192, 138, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(236, 238, 241, 0.95);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.public-layout .consult-trust-item i {
+  color: rgba(216, 192, 138, 0.96);
+}
+
+.public-layout .consult-glass-form {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(200, 169, 106, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 18px 36px rgba(2, 8, 18, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: clamp(1.05rem, 2.2vw, 1.55rem);
+}
+
+.public-layout .consult-floating > .form-control,
+.public-layout .consult-floating > .form-select {
+  border-color: rgba(216, 192, 138, 0.24);
+  min-height: 54px;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.public-layout .consult-floating > label {
+  color: rgba(196, 205, 221, 0.86);
+  padding-inline: 0.86rem;
+}
+
+.public-layout .consult-floating > .form-control:focus,
+.public-layout .consult-floating > .form-select:focus {
+  border-color: rgba(216, 192, 138, 0.96);
+  box-shadow: 0 0 0 0.12rem rgba(216, 192, 138, 0.12);
+}
+
+.public-layout .consult-floating > .form-control:focus ~ label,
+.public-layout .consult-floating > .form-control:not(:placeholder-shown) ~ label,
+.public-layout .consult-floating > .form-select ~ label {
+  color: rgba(238, 221, 185, 0.98);
+}
+
+.public-layout .consult-select-wrap .form-select {
+  cursor: pointer;
+}
+
+.public-layout .consult-select-wrap .form-select:focus {
+  outline: 0;
+}
+
+.public-layout .consult-message-guide {
+  color: rgba(222, 228, 238, 0.96);
+  font-size: 0.92rem;
+}
+
+.public-layout .consult-textarea-wrap > label {
+  /* [수정] 2026-02-20: 상담내용 라벨 기본 톤은 골드로 유지 */
+  color: rgba(238, 221, 185, 0.98);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.public-layout .consult-textarea-wrap > label::after {
+  /* [수정] 2026-02-20: 상담내용 라벨의 기본 ::after 레이어를 항상 제거 */
+  content: none !important;
+  display: none !important;
+}
+
+.public-layout .consult-textarea-wrap > .form-control:focus ~ label,
+.public-layout .consult-textarea-wrap > .form-control:not(:placeholder-shown) ~ label {
+  /* [수정] 2026-02-20: 상담내용 플로팅 라벨을 폼 내부 상단에 유지하고 흰 배경+네이비 글자로 표시 */
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  color: #0f1b33;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 999px;
+  padding: 0.06rem 0.52rem;
+  width: auto !important;
+  max-width: max-content;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-left: 0;
+  left: 0.68rem;
+  right: auto;
+  bottom: auto;
+  top: 0.52rem;
+  transform: scale(0.85) !important;
+  transform-origin: left top;
+  line-height: 1.22;
+  font-weight: 600;
+  overflow: visible;
+  box-shadow: 0 2px 8px rgba(3, 8, 18, 0.2);
+}
+
+.public-layout .consult-textarea-wrap > .form-control:focus ~ label::after,
+.public-layout .consult-textarea-wrap > .form-control:not(:placeholder-shown) ~ label::after {
+  /* [수정] 2026-02-20: Bootstrap form-floating 기본 보조 배경(::after) 제거로 라벨 깨짐 방지 */
+  content: none !important;
+  display: none !important;
+}
+
+.public-layout .consult-textarea-wrap > .consult-textarea.form-control {
+  /* [수정] 2026-02-20: Bootstrap floating textarea 기본 고정 높이를 덮어써 충분히 넓은 작성 영역 확보 */
+  min-height: 420px;
+  height: clamp(420px, 48vh, 560px);
+  padding: 1.85rem 1rem 0.92rem;
+  line-height: 1.8;
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* [수정] 2026-02-20: 상담내용 포커스 시 색 변화는 최소화하고 대비만 유지 */
+.public-layout .consult-textarea-wrap > .consult-textarea.form-control,
+.public-layout .consult-textarea-wrap > .consult-textarea.form-control:focus {
+  background-color: rgba(8, 15, 27, 0.92);
+  color: rgba(247, 249, 252, 0.99);
+}
+
+.public-layout .consult-textarea-wrap > .consult-textarea.form-control:focus {
+  border-color: rgba(216, 192, 138, 0.72);
+  box-shadow: 0 0 0 0.08rem rgba(216, 192, 138, 0.1);
+}
+
+.public-layout .consult-textarea::placeholder {
+  color: rgba(191, 200, 214, 0.82);
+  opacity: 1;
+}
+
+.public-layout .consult-consent {
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.72rem 0.86rem;
+}
+
+.public-layout .consult-consent .form-check-input {
+  width: 1.08rem;
+  height: 1.08rem;
+  margin-top: 0.18rem;
+  border-color: rgba(216, 192, 138, 0.44);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.public-layout .consult-consent .form-check-input:checked {
+  border-color: rgba(216, 192, 138, 0.98);
+  background-color: rgba(216, 192, 138, 0.98);
+}
+
+.public-layout .consult-consent .form-check-input:focus {
+  box-shadow: 0 0 0 0.16rem rgba(216, 192, 138, 0.2);
+}
+
+.public-layout .consult-consent .form-check-label {
+  color: rgba(230, 233, 239, 0.95);
+}
+
+.btn-consult-submit {
+  /* [수정] 2026-02-20: 상담신청 버튼을 중앙 고정폭으로 표시 */
+  display: block;
+  width: min(100%, 360px);
+  margin-inline: auto;
+  border: 1px solid rgba(216, 192, 138, 0.98);
+  background: rgba(216, 192, 138, 0.96);
+  color: #0e1726;
+  font-weight: 700;
+  min-height: 50px;
+  letter-spacing: 0.01em;
+}
+
+.btn-consult-submit:hover,
+.btn-consult-submit:focus {
+  border-color: #b48f54;
+  background: #b48f54;
+  color: #ffffff;
+}
+
+.public-layout .consult-secret-note {
+  margin-top: 0.62rem;
+  text-align: center;
+  color: rgba(190, 197, 209, 0.9);
+  font-size: 0.84rem;
+}
+
+@media (max-width: 991.98px) {
+  .public-layout .consult-glass-form {
+    padding: 1rem;
+  }
+
+  .public-layout .consult-trust-list {
+    gap: 0.52rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .public-layout .consult-trust-list {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .public-layout .consult-trust-item {
+    justify-content: center;
+  }
+
+  .public-layout .consult-textarea-wrap > .consult-textarea.form-control {
+    min-height: 300px;
+    height: 300px;
+  }
+}
+
+.table-dark {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+  --bs-table-hover-bg: rgba(216, 192, 138, 0.08);
+  --bs-table-border-color: rgba(255, 255, 255, 0.12);
+}
+
+.link-gold {
+  color: var(--line-gold);
+  text-decoration: none;
+}
+
+.link-gold:hover {
+  text-decoration: underline;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line-soft);
+  background:
+    radial-gradient(54rem 26rem at 12% 8%, rgba(216, 192, 138, 0.08), transparent 72%),
+    radial-gradient(46rem 24rem at 86% 18%, rgba(88, 112, 164, 0.1), transparent 74%),
+    rgba(9, 15, 27, 0.92);
+}
+
+.footer-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+.footer-col {
+  min-width: 0;
+}
+
+.footer-col + .footer-col {
+  border-left: 1px solid rgba(216, 192, 138, 0.2);
+  padding-left: 1.4rem;
+}
+
+.footer-firm-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.52rem;
+  color: rgba(239, 220, 180, 0.95);
+  font-family: var(--font-title);
+  font-size: clamp(1.15rem, 0.75vw + 0.98rem, 1.52rem);
+  line-height: 1.2;
+}
+
+.footer-firm-title i {
+  color: rgba(216, 192, 138, 0.98);
+  font-size: 1.05rem;
+}
+
+.footer-firm-slogan {
+  color: rgba(220, 221, 224, 0.92);
+  line-height: 1.65;
+  max-width: 28ch;
+}
+
+.footer-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.62rem;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.52rem;
+  color: rgba(232, 233, 236, 0.92);
+}
+
+.footer-contact-item i {
+  color: rgba(216, 192, 138, 0.95);
+  margin-top: 0.18rem;
+  font-size: 0.96rem;
+}
+
+.footer-col-title {
+  font-family: var(--font-title);
+  color: rgba(239, 220, 180, 0.95);
+  font-size: clamp(1.08rem, 0.45vw + 0.94rem, 1.34rem);
+}
+
+.footer-quick-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.44rem;
+}
+
+.footer-quick-links a {
+  color: rgba(224, 227, 234, 0.92);
+  text-decoration: none;
+  line-height: 1.55;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-quick-links a:hover,
+.footer-quick-links a:focus {
+  color: rgba(243, 227, 194, 0.98);
+  border-bottom-color: rgba(216, 192, 138, 0.9);
+}
+
+.footer-map-card {
+  /* [수정] 2026-02-21: 지도 카드 테두리를 더 둥글고 두껍게 조정 */
+  border: 2px solid rgba(216, 192, 138, 0.58);
+  border-radius: 14px;
+  background: rgba(10, 18, 32, 0.5);
+  overflow: hidden;
+}
+
+.footer-map-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-map-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(6, 10, 18, 0.1), rgba(6, 10, 18, 0.28));
+}
+
+.footer-map {
+  width: 100%;
+  min-height: 168px;
+  border: 0;
+  display: block;
+}
+
+.footer-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  width: 100%;
+  padding: 0.58rem 0.72rem 0.62rem;
+  color: var(--line-gold);
+  text-decoration: none;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  border-top: 1px solid rgba(216, 192, 138, 0.26);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.footer-map-link:hover,
+.footer-map-link:focus {
+  background: rgba(216, 192, 138, 0.08);
+  color: rgba(246, 230, 198, 0.98);
+}
+
+.footer-divider {
+  border-color: rgba(216, 192, 138, 0.22);
+}
+
+.footer-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.footer-copy {
+  color: rgba(198, 205, 218, 0.9);
+}
+
+.footer-legal-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.66rem;
+}
+
+.footer-legal-links li {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-legal-links li + li::before {
+  content: "|";
+  color: rgba(216, 192, 138, 0.45);
+  margin-right: 0.66rem;
+}
+
+.footer-legal-links a {
+  color: rgba(228, 212, 180, 0.9);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-legal-links a:hover,
+.footer-legal-links a:focus {
+  color: rgba(246, 229, 194, 0.98);
+  border-bottom-color: rgba(216, 192, 138, 0.88);
+}
+
+@media (max-width: 991.98px) {
+  .footer-main-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-visit-col {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .footer-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .footer-col + .footer-col {
+    border-left: 0;
+    border-top: 1px solid rgba(216, 192, 138, 0.18);
+    padding-left: 0;
+    padding-top: 0.95rem;
+  }
+
+  .footer-subbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .section-header {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin: 0 auto 1.8rem;
+  /* [수정] 2026-02-20: 텍스트가 컨테이너 가용 폭 끝까지 사용할 수 있도록 고정 폭 제한 제거 */
+  max-width: none;
+  text-align: center;
+}
+
+.public-layout .section-title {
+  margin-bottom: 0;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .hero-subtitle {
+  /* [수정] 2026-02-20: 줄바꿈 전에 컨테이너 가용 폭 끝까지 사용하도록 최대 폭 제한 제거 */
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.95rem, 0.6vw + 0.82rem, 1.18rem);
+  text-wrap: balance;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* [수정] 2026-02-20: PC/태블릿/모바일에서 맥락 중심 줄바꿈이 되도록 한국어 타이포 그래피 규칙 추가 */
+.public-layout {
+  --wrap-measure-display: 100%;
+  --wrap-measure-body: 100%;
+}
+
+.public-layout :is(
+  h1,
+  h2,
+  h3,
+  .section-title,
+  .hero-title,
+  .home-strong-cta-headline,
+  .practice-detail-title
+) {
+  word-break: keep-all;
+  line-break: auto;
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+
+.public-layout :is(
+  p,
+  li,
+  .card-text,
+  .muted-text,
+  .metric-label,
+  .footer-text,
+  .home-outcome-summary,
+  .home-why-item-desc,
+  .practice-scope-desc,
+  .practice-point-desc
+) {
+  word-break: keep-all;
+  line-break: auto;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.public-layout .hero-title,
+.public-layout .hero-subtitle,
+.public-layout .section-header .section-title,
+.public-layout .section-header .card-text {
+  /* [수정] 2026-02-20: 화면/카드 가용 너비를 끝까지 쓰고 경계 직전에서 줄바꿈 */
+  max-inline-size: var(--wrap-measure-display);
+  margin-inline: auto;
+}
+
+.public-layout :is(
+  .home-outcome-summary,
+  .home-why-item-desc,
+  .practice-scope-desc,
+  .practice-point-desc
+) {
+  /* [수정] 2026-02-20: 카드 내부 본문도 카드의 실제 가용 폭까지 사용 */
+  max-inline-size: var(--wrap-measure-body);
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout {
+  --hero-stack-gap: clamp(1.15rem, 2vw, 1.6rem);
+}
+
+.public-layout .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.72rem;
+  margin-top: var(--hero-stack-gap);
+}
+
+.public-layout .hero-btn {
+  min-width: 144px;
+  padding: 0.58rem 1.15rem;
+  font-size: clamp(0.88rem, 0.2vw + 0.84rem, 0.98rem);
+  font-weight: 500;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .hero-trust {
+  /* [수정] 2026-02-20: Hero trust 영역을 메인 강조 요소로 키우기 위해 상단 여백 확대 */
+  margin-top: clamp(1.35rem, 2.4vw, 2rem);
+}
+
+.public-layout .hero-trust .trust-strip {
+  width: min(100%, 980px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* [수정] 2026-02-20: Hero trust는 지표 가독성만 유지하고 라인/배경/구분선을 제거 */
+.public-layout .hero-trust .trust-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  grid-template-columns: none;
+  justify-content: center;
+  gap: clamp(0.55rem, 1.45vw, 1.55rem);
+  padding: clamp(0.7rem, 1.6vw, 1.1rem) clamp(0.28rem, 1.2vw, 0.72rem);
+  border: 0;
+  background: transparent;
+}
+
+.public-layout .hero-trust .trust-item {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: clamp(0.35rem, 1vw, 0.72rem) clamp(0.15rem, 0.6vw, 0.52rem);
+}
+
+.public-layout .hero-trust .trust-item + .trust-item {
+  border-left: 0;
+}
+
+.public-layout .hero-trust .metric-value {
+  /* [수정] 2026-02-20: Hero 통계 숫자를 크게 노출해 첫 화면에서 시선 집중 강화 */
+  font-size: clamp(1.45rem, 4.4vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  text-shadow: none;
+  margin-bottom: 0.2rem;
+}
+
+.public-layout .hero-trust .metric-label {
+  font-size: clamp(0.8rem, 1.55vw, 1.04rem);
+  line-height: 1.34;
+  color: rgba(225, 231, 242, 0.92);
+}
+
+/* [수정] 2026-02-19: 핵심 업무 분야를 참고 시안처럼 라인 그리드 중심 쇼케이스로 스타일링 */
+.public-layout .practice-showcase-section {
+  position: relative;
+  /* [수정] 2026-02-19: 메인페이지 핵심업무분야 섹션 스타일을 원래 톤으로 복구 */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.public-layout .practice-showcase-section::before {
+  /* [수정] 2026-02-19: 메인 섹션 오버레이 제거 요청에 따라 핵심업무분야 전용 오버레이 비활성화 */
+  display: none;
+}
+
+.public-layout .practice-showcase-section .container {
+  position: relative;
+  z-index: 1;
+}
+
+.public-layout .practice-showcase-header {
+  margin-bottom: clamp(1.25rem, 2.4vw, 2.1rem);
+}
+
+/* [수정] 2026-02-21: 핵심 업무 분야 그리드를 레퍼런스 톤(카드형 골드 라인/포인트 리스트)으로 개편 */
+.public-layout .practice-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.62rem, 1.4vw, 0.92rem);
+}
+
+/* [수정] 2026-02-19: 홈 섹션 간 패딩은 section-block 기본값으로 동일하게 유지 */
+
+.public-layout .practice-showcase-item {
+  position: relative;
+  min-height: clamp(220px, 22vw, 258px);
+  padding: clamp(0.95rem, 1.8vw, 1.3rem) clamp(0.85rem, 1.65vw, 1.18rem) 0.85rem;
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  border-radius: 4px;
+  text-align: left;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 0.48rem;
+  text-decoration: none;
+  color: var(--text-main);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(216, 192, 138, 0.12), transparent 56%),
+    radial-gradient(circle at 82% 92%, rgba(216, 170, 104, 0.08), transparent 62%),
+    linear-gradient(160deg, rgba(10, 18, 33, 0.78), rgba(7, 14, 26, 0.9));
+  transition: border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.public-layout .practice-showcase-item::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 46%;
+  height: 2px;
+  transform: translateX(-50%) scaleX(0.45);
+  transform-origin: center;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.92), transparent);
+  opacity: 0;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.public-layout .practice-showcase-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(216, 192, 138, 0.68);
+  box-shadow: 0 14px 28px rgba(3, 8, 17, 0.34);
+  background-color: rgba(216, 192, 138, 0.06);
+  color: #ffffff;
+}
+
+.public-layout .practice-showcase-item:hover::before {
+  transform: translateX(-50%) scaleX(1);
+  opacity: 1;
+}
+
+.public-layout .practice-showcase-item:visited {
+  color: var(--text-main);
+}
+
+.public-layout .practice-showcase-item:focus-visible {
+  outline: 1px solid rgba(216, 192, 138, 0.85);
+  outline-offset: -2px;
+}
+
+.public-layout .practice-showcase-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.24rem, 0.96vw + 1rem, 1.68rem);
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.public-layout .practice-showcase-desc {
+  margin: 0;
+  color: rgba(244, 246, 251, 0.8);
+  font-size: clamp(0.88rem, 0.4vw + 0.78rem, 1rem);
+  line-height: 1.62;
+  word-break: keep-all;
+}
+
+.public-layout .practice-showcase-en {
+  margin: 0;
+  color: rgba(226, 228, 232, 0.82);
+  font-size: clamp(0.76rem, 0.24vw + 0.68rem, 0.9rem);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.public-layout .practice-showcase-divider {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.34), transparent);
+}
+
+.public-layout .practice-showcase-points {
+  margin: 0;
+  padding: 0.08rem 0 0 1.05rem;
+  display: grid;
+  gap: 0.34rem;
+  color: rgba(230, 231, 234, 0.9);
+  font-size: clamp(0.82rem, 0.22vw + 0.76rem, 0.92rem);
+  line-height: 1.5;
+}
+
+.public-layout .practice-showcase-points li {
+  margin: 0;
+}
+
+.public-layout .practice-showcase-arrow {
+  justify-self: end;
+  align-self: end;
+  color: rgba(226, 202, 153, 0.92);
+  font-size: 1.12rem;
+  line-height: 1;
+  padding-right: 0.06rem;
+}
+
+/* [수정] 2026-02-19: 업무분야 상세 페이지 과한 연출을 줄이고 다크 프리미엄 톤으로 절제 */
+.public-layout .practice-detail-block {
+  position: relative;
+  overflow: hidden;
+}
+
+.public-layout .practice-detail-block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 34%, rgba(216, 151, 76, 0.1), transparent 46%),
+    radial-gradient(circle at 18% 76%, rgba(216, 192, 138, 0.08), transparent 50%),
+    linear-gradient(116deg, rgba(7, 12, 23, 0.84) 0%, rgba(10, 16, 29, 0.76) 56%, rgba(14, 18, 28, 0.72) 100%);
+  pointer-events: none;
+}
+
+.public-layout .practice-detail-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 202, 137, 0.04) 1px, transparent 1.2px),
+    radial-gradient(circle, rgba(255, 202, 137, 0.02) 1px, transparent 1.2px);
+  background-size: 90px 90px, 56px 56px;
+  background-position: 0 0, 24px 16px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.public-layout .practice-detail-block .container {
+  position: relative;
+  z-index: 1;
+}
+
+.public-layout .practice-detail-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: clamp(1rem, 1.4vw, 1.35rem);
+}
+
+.public-layout .practice-detail-hero-shell {
+  /* [수정] 2026-02-19: 상세 Hero를 박스 이미지 대신 섹션 전체 배경 이미지 구조로 변경 */
+  position: relative;
+  border-top: 1px solid rgba(216, 192, 138, 0.22);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.22);
+  min-height: clamp(320px, 42vw, 500px);
+  padding: clamp(1.15rem, 2.2vw, 2rem) clamp(0.9rem, 2vw, 1.9rem);
+  margin-bottom: clamp(1.8rem, 3.2vw, 2.9rem);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 64% 28%, rgba(232, 174, 102, 0.18), transparent 44%),
+    radial-gradient(circle at 68% 62%, rgba(232, 174, 102, 0.1), transparent 48%),
+    linear-gradient(128deg, rgba(8, 14, 27, 0.9) 0%, rgba(15, 20, 33, 0.84) 100%);
+}
+
+.public-layout .practice-detail-hero-shell.has-image {
+  background:
+    linear-gradient(110deg, rgba(6, 10, 20, 0.9) 0%, rgba(6, 10, 20, 0.8) 42%, rgba(6, 10, 20, 0.38) 100%),
+    var(--practice-hero-image);
+  background-size: cover;
+  background-position: center right;
+}
+
+.public-layout .practice-detail-hero-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 32% 36%, rgba(246, 180, 95, 0.1), transparent 42%),
+    linear-gradient(90deg, rgba(3, 8, 18, 0.72) 0%, rgba(3, 8, 18, 0.44) 46%, rgba(3, 8, 18, 0.22) 100%);
+  pointer-events: none;
+}
+
+.public-layout .practice-detail-hero-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 200, 124, 0.04) 1px, transparent 1.2px);
+  background-size: 52px 52px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.public-layout .practice-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: min(58%, 660px);
+}
+
+.public-layout .practice-detail-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.35rem, 5vw, 4.2rem);
+  line-height: 1.04;
+  margin: 0;
+}
+
+.public-layout .practice-detail-lead {
+  /* [수정] 2026-02-19: 상세페이지 텍스트 답답함 완화를 위해 줄 간격/내부 간격을 확대 */
+  max-width: 640px;
+  color: rgba(244, 246, 251, 0.88);
+  font-size: clamp(1rem, 0.55vw + 0.84rem, 1.2rem);
+  line-height: 1.86;
+}
+
+.public-layout .practice-keyword-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  margin-top: clamp(0.95rem, 1.8vw, 1.35rem);
+  padding-top: 0.82rem;
+  border-top: 1px solid rgba(216, 192, 138, 0.16);
+}
+
+.public-layout .practice-keyword-label {
+  color: rgba(216, 192, 138, 0.86);
+  font-size: 0.78rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.public-layout .practice-keyword-item {
+  position: relative;
+  color: rgba(222, 214, 194, 0.84);
+  font-size: 0.9rem;
+  padding-left: 0.92rem;
+  line-height: 1.56;
+}
+
+.public-layout .practice-keyword-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(216, 192, 138, 0.62);
+}
+
+.public-layout .practice-detail-section {
+  /* [수정] 2026-02-19: 상세 섹션 간 여백을 넓혀 블록 간 호흡을 개선 */
+  margin-top: clamp(1.85rem, 3vw, 2.85rem);
+  padding-top: clamp(1.35rem, 2.5vw, 2.15rem);
+  border-top: 1px solid rgba(216, 192, 138, 0.18);
+}
+
+.public-layout .practice-detail-heading {
+  font-family: var(--font-title);
+  font-size: clamp(1.56rem, 1.2vw + 1.2rem, 2.1rem);
+  margin: 0 0 clamp(0.8rem, 1.2vw, 1.15rem);
+}
+
+.public-layout .practice-scope-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.84rem;
+}
+
+.public-layout .practice-scope-item {
+  /* [수정] 2026-02-19: 주요 대응 범위 박스를 시안처럼 입자/글로우가 느껴지는 프리미엄 스타일로 강화 */
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(168px, 18vw, 216px);
+  border: 1px solid rgba(216, 192, 138, 0.32);
+  background:
+    radial-gradient(circle at 22% 22%, rgba(233, 171, 95, 0.08), transparent 46%),
+    radial-gradient(circle at 78% 84%, rgba(233, 171, 95, 0.05), transparent 44%),
+    linear-gradient(180deg, rgba(13, 21, 35, 0.68), rgba(10, 17, 30, 0.28));
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 192, 138, 0.04),
+    inset 0 -14px 24px rgba(0, 0, 0, 0.24),
+    0 6px 14px rgba(0, 0, 0, 0.2);
+  padding: 1.04rem 0.92rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.62rem;
+  transition: border-color 0.2s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.public-layout .practice-scope-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgba(255, 195, 120, 0.04), transparent 50%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.public-layout .practice-scope-item::after {
+  /* [수정] 2026-02-19: 카드 하단 글로우 라인 효과 제거 */
+  display: none;
+}
+
+.public-layout .practice-scope-item:hover {
+  border-color: rgba(216, 192, 138, 0.44);
+  background-color: rgba(216, 192, 138, 0.02);
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 192, 138, 0.08),
+    inset 0 -14px 24px rgba(0, 0, 0, 0.28),
+    0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.public-layout .practice-scope-icon {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: rgba(220, 191, 133, 0.88);
+  font-size: 1.42rem;
+  line-height: 1;
+}
+
+/* [수정] 2026-02-19: Bootstrap 라인 아이콘의 시각적 정렬/두께를 카드 스타일에 맞춰 보정 */
+.public-layout .practice-scope-icon .bi {
+  display: inline-block;
+  font-size: 1.42rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.public-layout .practice-scope-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-title);
+  font-size: clamp(1.04rem, 0.78vw + 0.86rem, 1.28rem);
+  line-height: 1.38;
+  margin: 0;
+}
+
+.public-layout .practice-scope-desc {
+  position: relative;
+  z-index: 1;
+  color: rgba(219, 215, 203, 0.82);
+  font-size: clamp(0.84rem, 0.24vw + 0.78rem, 0.94rem);
+  line-height: 1.72;
+}
+
+.public-layout .practice-point-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* [수정] 2026-02-21: 핵심 수행 포인트(01/02/03) 항목 간 간격을 크게 확장 */
+  gap: 2.05rem 1.95rem;
+}
+
+.public-layout .practice-point-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.08rem;
+  align-items: start;
+  border-left: 1px solid rgba(216, 192, 138, 0.22);
+  padding-left: 1rem;
+  padding-top: 0.22rem;
+  padding-bottom: 0.2rem;
+}
+
+.public-layout .practice-point-number {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  line-height: 0.92;
+  color: rgba(216, 192, 138, 0.88);
+}
+
+.public-layout .practice-point-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.08rem, 0.72vw + 0.92rem, 1.35rem);
+  line-height: 1.42;
+  margin: 0;
+}
+
+.public-layout .practice-point-desc {
+  color: rgba(244, 246, 251, 0.86);
+  font-size: clamp(0.88rem, 0.3vw + 0.82rem, 0.98rem);
+  line-height: 1.74;
+}
+
+.public-layout .practice-doc-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.58rem;
+}
+
+.public-layout .practice-doc-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  color: rgba(225, 216, 196, 0.86);
+  background: rgba(216, 192, 138, 0.04);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.public-layout .practice-detail-cta {
+  position: relative;
+  margin-top: clamp(2.3rem, 3.8vw, 3.4rem);
+  padding: clamp(2.3rem, 3.8vw, 3.3rem) clamp(1rem, 2.6vw, 2.1rem) clamp(1.9rem, 3.1vw, 2.8rem);
+  border-top: 1px solid rgba(216, 192, 138, 0.22);
+  background: linear-gradient(180deg, rgba(13, 19, 31, 0.18), rgba(13, 19, 31, 0.04));
+  text-align: center;
+}
+
+.public-layout .practice-detail-cta::before,
+.public-layout .practice-detail-cta::after {
+  /* [수정] 2026-02-19: CTA 글로우 라인 효과 제거 */
+  display: none;
+}
+
+.public-layout .practice-detail-cta::before {
+  top: -1px;
+}
+
+.public-layout .practice-detail-cta::after {
+  bottom: 0;
+}
+
+.public-layout .practice-detail-cta-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 4.1vw, 3.45rem);
+  color: rgba(234, 226, 210, 0.94);
+  line-height: 1.2;
+}
+
+.public-layout .practice-detail-cta-subtitle {
+  color: rgba(206, 205, 201, 0.84);
+  font-size: clamp(0.98rem, 0.62vw + 0.82rem, 1.24rem);
+  line-height: 1.62;
+}
+
+.public-layout .practice-detail-cta-btn {
+  min-width: 230px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.04rem;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .attorney-showcase {
+  position: relative;
+  display: block;
+  max-width: 980px;
+  margin: 0 auto;
+  padding-inline: clamp(3rem, 7vw, 4.8rem);
+}
+
+.public-layout .attorney-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: clamp(42px, 5vw, 54px);
+  height: clamp(42px, 5vw, 54px);
+  border-radius: 50%;
+  border: 1px solid rgba(216, 192, 138, 0.55);
+  background: rgba(18, 28, 45, 0.55);
+  color: var(--line-gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(4, 8, 16, 0.35);
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  /* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+  /* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+  animation: attorney-float 1.35s linear infinite alternate;
+  will-change: transform;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .attorney-prev {
+  left: 0;
+}
+
+.public-layout .attorney-next {
+  right: 0;
+  animation-delay: 0s;
+}
+
+.public-layout .attorney-nav:hover,
+.public-layout .attorney-nav:focus-visible {
+  border-color: var(--line-gold);
+  background: rgba(216, 192, 138, 0.14);
+  box-shadow: 0 9px 22px rgba(4, 8, 16, 0.45);
+  transform: translateY(calc(-50% - 2px));
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .attorney-showcase.is-nav-paused .attorney-nav {
+  animation-play-state: paused;
+}
+
+.public-layout .attorney-nav:active {
+  transform: translateY(calc(-50% + 1px)) scale(0.98);
+}
+
+.public-layout .attorney-stage {
+  position: relative;
+  /* [수정] 2026-02-19: 사선 무대 안 중앙 이미지를 키우기 위해 스테이지 높이 확대 */
+  /* [수정] 2026-02-19: 이미지/사선 높이를 변수로 연결해 이미지가 프레임 밖으로 나가지 않도록 고정 */
+  --attorney-image-h: clamp(320px, 48vw, 560px);
+  --attorney-line-h: calc(var(--attorney-image-h) + 56px);
+  min-height: clamp(440px, 62vw, 660px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem clamp(3rem, 9vw, 7rem) 0.25rem;
+}
+
+.public-layout .attorney-stage-line {
+  position: absolute;
+  /* [수정] 2026-02-19: 사선을 스테이지 중앙 기준으로 배치하고 이미지 높이에 맞춰 동기화 */
+  top: 50%;
+  height: var(--attorney-line-h);
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(216, 192, 138, 0.85), transparent);
+}
+
+.public-layout .attorney-stage-line-left {
+  left: clamp(1.4rem, 5vw, 5rem);
+  transform: translateY(-50%) rotate(24deg);
+}
+
+.public-layout .attorney-stage-line-right {
+  right: clamp(1.4rem, 5vw, 5rem);
+  /* [수정] 2026-02-19: 사선 무대를 / 이미지 / 구성으로 맞추기 위해 오른쪽 사선 방향을 좌측과 통일 */
+  transform: translateY(-50%) rotate(24deg);
+}
+
+.public-layout .attorney-stage-content {
+  /* [수정] 2026-02-19: 사선 프레임 중앙에 이미지가 오도록 stage-content 높이를 라인 높이와 동기화 */
+  width: min(100%, 620px);
+  margin: 0 auto;
+  min-height: var(--attorney-line-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.public-layout .attorney-profile {
+  display: none;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  min-height: var(--attorney-line-h);
+}
+
+.public-layout a.attorney-profile {
+  /* [수정] 2026-02-20: 홈 변호사 이미지 링크 연결 시 기본 링크 장식을 제거 */
+  color: inherit;
+  text-decoration: none;
+}
+
+.public-layout .attorney-profile.is-active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: attorney-fade-in 0.35s ease;
+}
+
+.public-layout .attorney-avatar {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  margin: 0 auto 0.8rem;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.public-layout .attorney-avatar::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 54px;
+  height: 54px;
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.public-layout .attorney-avatar::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 9px;
+  width: 88px;
+  height: 58px;
+  border: 2px solid rgba(255, 255, 255, 0.62);
+  border-bottom: 0;
+  border-top-left-radius: 46px;
+  border-top-right-radius: 46px;
+  transform: translateX(-50%);
+}
+
+.public-layout .attorney-avatar-arms {
+  position: absolute;
+  left: 50%;
+  top: 68px;
+  width: 60px;
+  height: 20px;
+  border-top: 2px solid var(--line-gold);
+  border-bottom: 2px solid var(--line-gold);
+  border-radius: 999px;
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+/* [수정] 2026-02-19: 로컬 프로필 이미지 사용 시 기본 스케치 아바타를 숨기고 실제 이미지를 표시 */
+.public-layout .attorney-avatar.has-image::before,
+.public-layout .attorney-avatar.has-image::after,
+.public-layout .attorney-avatar.has-image .attorney-avatar-arms {
+  display: none;
+}
+
+.public-layout .attorney-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  display: block;
+}
+
+/* [수정] 2026-02-19: 이미지 노출 영역을 중앙으로 모으고 크기를 확장 */
+.public-layout .attorney-avatar.has-image {
+  width: min(100%, 390px);
+  height: var(--attorney-image-h);
+  margin: 0 auto;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.public-layout .attorney-avatar.has-image .attorney-avatar-image {
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center center;
+}
+
+/* [수정] 2026-02-19: 소개글을 이미지 하단으로 확실히 분리 배치 */
+.public-layout .attorney-copy-track {
+  width: min(100%, 620px);
+  margin: clamp(1.2rem, 2.6vw, 1.8rem) auto 0;
+}
+
+.public-layout .attorney-copy-item {
+  display: none;
+  text-align: center;
+}
+
+.public-layout a.attorney-copy-item {
+  /* [수정] 2026-02-20: 홈 변호사 정보 링크 연결 시 기본 링크 장식을 제거 */
+  color: inherit;
+  text-decoration: none;
+}
+
+.public-layout .attorney-copy-item.is-active {
+  display: block;
+  animation: attorney-fade-in 0.3s ease;
+}
+
+/* [수정] 2026-02-19: 변호사 목록 페이지에서도 같은 로컬 이미지 경로를 재사용 */
+.public-layout .attorney-list-media {
+  width: 96px;
+  height: 96px;
+}
+
+.public-layout .attorney-list-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 192, 138, 0.35);
+  display: block;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+@keyframes attorney-float {
+  from {
+    transform: translateY(calc(-50% + 4px));
+  }
+  to {
+    transform: translateY(calc(-50% - 6px));
+  }
+}
+
+/* [수정] 2026-02-19: 모바일 정적 배치 버튼용 상하 이동 애니메이션 추가 */
+@keyframes attorney-float-mobile {
+  from {
+    transform: translateY(4px);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes attorney-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.public-layout .panel-card,
+.public-layout .line-list,
+.public-layout .line-item,
+.public-layout .process-list,
+.public-layout .process-item,
+.public-layout .cta-banner {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.public-layout .line-list,
+.public-layout .process-list,
+.public-layout .cta-banner,
+.public-layout form.panel-card {
+  background: linear-gradient(180deg, rgba(18, 28, 45, 0.42), rgba(18, 28, 45, 0.12));
+  padding: 1.6rem 1.75rem;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+.public-layout .trust-strip {
+  background: transparent;
+}
+
+.public-layout .line-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 3rem;
+}
+
+.public-layout .line-item {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.public-layout .line-item .row {
+  margin: 0;
+}
+
+.public-layout .line-item [class*="col-"] {
+  padding: 0;
+}
+
+.public-layout .line-item .card-title {
+  margin-bottom: 0.65rem;
+}
+
+.public-layout .card-title {
+  font-size: clamp(1.02rem, 0.42vw + 0.93rem, 1.22rem);
+}
+
+.public-layout .card-text,
+.public-layout .metric-label {
+  font-size: clamp(0.9rem, 0.34vw + 0.82rem, 1rem);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.public-layout .trust-strip {
+  gap: 1.6rem;
+}
+
+.public-layout .trust-item {
+  padding: 0.4rem 0.2rem;
+}
+
+.public-layout .process-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem 2.2rem;
+}
+
+.public-layout .process-item {
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+  padding: 0;
+}
+
+/* [수정] 2026-02-20: 메인 하단 섹션을 결과 중심 카드/신뢰/타임라인/강력 CTA 구조로 스타일링 */
+.public-layout .home-outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.public-layout .home-outcome-card {
+  position: relative;
+  min-height: 196px;
+  border: 1px solid rgba(216, 192, 138, 0.26);
+  background:
+    radial-gradient(circle at 82% 16%, rgba(216, 164, 96, 0.14), transparent 54%),
+    linear-gradient(180deg, rgba(14, 22, 37, 0.78), rgba(10, 17, 30, 0.88));
+  padding: 0.98rem;
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.public-layout .home-outcome-link {
+  /* [수정] 2026-02-20: 홈 성공사례 카드를 링크로 사용해도 기존 카드 스타일 유지 */
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.public-layout .home-outcome-link:visited {
+  color: inherit;
+}
+
+.public-layout .home-outcome-card::before {
+  content: "";
+  position: absolute;
+  left: 0.98rem;
+  right: 0.98rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.95), transparent);
+  transform: scaleX(0.24);
+  transform-origin: center;
+  opacity: 0;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.public-layout .home-outcome-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(216, 192, 138, 0.64);
+  box-shadow: 0 12px 26px rgba(2, 8, 18, 0.34);
+}
+
+.public-layout .home-outcome-card:hover::before {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.public-layout .home-outcome-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.12rem 0.62rem;
+  border: 1px solid rgba(216, 192, 138, 0.4);
+  color: rgba(238, 219, 180, 0.95);
+  font-size: 0.78rem;
+}
+
+.public-layout .home-outcome-result {
+  font-family: var(--font-title);
+  font-size: clamp(1.48rem, 1.2vw + 1.1rem, 2.04rem);
+  line-height: 1.2;
+  color: rgba(246, 233, 205, 0.98);
+  margin: 0 0 0.52rem;
+}
+
+.public-layout .home-outcome-summary {
+  color: rgba(221, 222, 224, 0.92);
+  line-height: 1.7;
+}
+
+.public-layout .home-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.public-layout .home-why-item {
+  min-height: 160px;
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background:
+    radial-gradient(circle at 18% 84%, rgba(216, 192, 138, 0.12), transparent 58%),
+    linear-gradient(180deg, rgba(14, 22, 37, 0.7), rgba(10, 17, 30, 0.82));
+  padding: 1rem;
+}
+
+.public-layout .home-why-item-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.02rem, 0.38vw + 0.96rem, 1.24rem);
+  margin: 0 0 0.5rem;
+}
+
+.public-layout .home-why-item-desc {
+  color: rgba(218, 220, 223, 0.92);
+  line-height: 1.66;
+}
+
+/* [수정] 2026-02-21: 상담 진행 절차 섹션 좌측 여백 보강을 위해 골드 그라데이션 레이어 추가 */
+.public-layout .home-process-section {
+  position: relative;
+}
+
+.public-layout .home-process-section::before {
+  /* [수정] 2026-02-21: 섹션 경계가 보이지 않도록 섹션 전용 오버레이 제거 */
+  display: none;
+}
+
+.public-layout .home-process-section > .container {
+  position: relative;
+}
+
+.public-layout .home-process-timeline {
+  --home-process-gap: 0.72rem;
+  position: relative;
+  display: grid;
+  gap: var(--home-process-gap);
+  /* [수정] 2026-02-20: 번호 축이 섹션 중앙에 오도록 타임라인 폭을 컨테이너 전체 기준으로 사용 */
+  max-width: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.public-layout .home-process-timeline::before {
+  /* [수정] 2026-02-20: 세로선을 숫자 사이 구간으로 분할 렌더링하기 위해 기존 전체 라인 제거 */
+  display: none;
+}
+
+.public-layout .home-process-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 120px;
+  z-index: 1;
+}
+
+.public-layout .home-process-item::after {
+  /* [수정] 2026-02-20: 세로선 구간의 중심을 숫자와 숫자 사이 중앙 높이에 정렬 */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + (var(--home-process-gap) / 2) - 22px);
+  height: 44px;
+  width: 1px;
+  transform: translateX(-50%);
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(216, 192, 138, 0.2),
+    rgba(216, 192, 138, 0.82) 50%,
+    rgba(216, 192, 138, 0.2)
+  );
+}
+
+.public-layout .home-process-item:last-child::after {
+  display: none;
+}
+
+.public-layout .home-process-number {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* [수정] 2026-02-20: 번호를 아이템 높이의 중앙축에 고정 */
+  transform: translate(-50%, -50%);
+  /* [수정] 2026-02-20: 숫자 영역 선 겹침을 구조적으로 제거했으므로 배경 마스크 제거 */
+  width: auto;
+  padding-inline: 0;
+  z-index: 2;
+  background: transparent;
+  border-radius: 0;
+  font-family: var(--font-title);
+  font-size: clamp(1.65rem, 1.2vw + 1.3rem, 2.2rem);
+  color: rgba(232, 206, 156, 0.96);
+  line-height: 1;
+  text-align: center;
+  padding-top: 0;
+  text-shadow: none;
+}
+
+.public-layout .home-process-copy {
+  /* [수정] 2026-02-20: 좌측 번호(중앙 축) 오른쪽에 내용 박스를 고정 배치 */
+  margin-left: calc(50% + 52px);
+  width: min(560px, calc(50% - 56px));
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background:
+    radial-gradient(circle at 78% 24%, rgba(216, 164, 96, 0.08), transparent 56%),
+    rgba(10, 17, 30, 0.56);
+  padding: 0.82rem 1rem 0.88rem;
+  min-height: 120px;
+}
+
+.public-layout .home-process-copy .card-title {
+  margin-bottom: 0.34rem;
+}
+
+.public-layout .home-process-copy .card-text {
+  font-size: clamp(0.86rem, 0.26vw + 0.8rem, 0.95rem);
+  line-height: 1.58;
+}
+
+.public-layout .home-strong-cta {
+  position: relative;
+  text-align: center;
+  border-top: 1px solid rgba(216, 192, 138, 0.32);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.32);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(216, 164, 96, 0.12), transparent 56%),
+    linear-gradient(180deg, rgba(9, 15, 27, 0.95), rgba(7, 12, 22, 0.95));
+  padding: clamp(1.8rem, 3vw, 2.7rem) 1rem;
+}
+
+.public-layout .home-strong-cta::before,
+.public-layout .home-strong-cta::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: min(220px, 60%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.95), transparent);
+}
+
+.public-layout .home-strong-cta::before {
+  top: 0;
+}
+
+.public-layout .home-strong-cta::after {
+  bottom: 0;
+}
+
+.public-layout .home-strong-cta-headline {
+  font-family: var(--font-title);
+  font-size: clamp(1.6rem, 2.3vw, 2.45rem);
+  color: rgba(246, 235, 210, 0.98);
+  line-height: 1.24;
+}
+
+.public-layout .home-strong-cta-subheadline {
+  color: rgba(222, 224, 227, 0.9);
+  font-size: clamp(0.98rem, 0.36vw + 0.88rem, 1.1rem);
+}
+
+.btn-home-solid-gold {
+  border: 1px solid rgba(216, 192, 138, 0.98);
+  background: rgba(216, 192, 138, 0.96);
+  color: #111826;
+  min-height: 44px;
+  min-width: 220px;
+  font-weight: 700;
+}
+
+.btn-home-solid-gold:hover,
+.btn-home-solid-gold:focus {
+  background: #e5cd97;
+  border-color: #e5cd97;
+  color: #0e1726;
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+@media (max-width: 991.98px) {
+  /* [수정] 2026-02-20: 태블릿 권장값(scale 1.01 / focus 50% 34%) 적용 */
+  :root {
+    --hero-video-scale: 1.01;
+    --hero-video-focus-x: 50%;
+    --hero-video-focus-y: 34%;
+  }
+
+  .section-block {
+    padding: 3.8rem 0;
+  }
+
+  .hero-section {
+    /* [수정] 2026-02-20: 사용자 요청에 따라 태블릿도 Hero 높이는 기존값 유지 */
+    min-height: calc(100svh - var(--site-header-height));
+    padding-top: 0;
+  }
+
+  /* [수정] 2026-02-20: 모바일/태블릿 햄버거 메뉴를 레이아웃 비침범 오버레이로 전환 */
+  .site-header .navbar > .container {
+    position: relative;
+  }
+
+  #mainNavbar {
+    position: fixed;
+    top: var(--site-header-height);
+    left: 0;
+    right: 0;
+    z-index: 1045;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  /* [수정] 2026-02-20: collapse height 계산 안정화를 위해 패널 스타일을 내부 nav로 이동 */
+  #mainNavbar .navbar-nav {
+    max-height: calc(100svh - var(--site-header-height));
+    overflow-y: auto;
+    padding: 0.75rem 1rem 1rem;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    background: rgba(8, 13, 23, 0.94);
+    box-shadow: 0 18px 36px rgba(2, 8, 18, 0.42);
+  }
+
+  /* [수정] 2026-02-20: 원래 Bootstrap 슬라이드(height) 효과를 유지하도록 collapse 기본 동작으로 복원 */
+  #mainNavbar.collapsing {
+    overflow-y: hidden;
+    transition: height 0.25s ease !important;
+    will-change: height;
+  }
+
+  #mainNavbar.collapse.show {
+    overflow-y: auto;
+  }
+
+  #mainNavbar.collapse:not(.show):not(.collapsing) {
+    overflow-y: hidden;
+  }
+
+  #mainNavbar .navbar-nav {
+    gap: 0.35rem;
+  }
+
+  #mainNavbar .nav-link {
+    display: block;
+    padding: 0.68rem 0.42rem;
+  }
+
+  body.nav-overlay-open {
+    /* [수정] 2026-02-20: 메뉴 오버레이 상태에서 스크롤/레이아웃은 고정하지 않고 기본 동작 유지 */
+    touch-action: auto;
+  }
+
+  .public-layout .line-list {
+    grid-template-columns: 1fr;
+    gap: 1.7rem;
+  }
+
+  /* [수정] 2026-02-19: 태블릿에서 핵심 업무 분야 그리드를 2열로 재배치 */
+  .public-layout .practice-showcase-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .practice-showcase-item {
+    min-height: clamp(204px, 34vw, 238px);
+    padding: 0.86rem 0.72rem 0.78rem;
+  }
+
+  .public-layout .practice-showcase-points {
+    font-size: 0.84rem;
+    gap: 0.28rem;
+  }
+
+  /* [수정] 2026-02-19: 태블릿 상세 Hero 배경 이미지 영역 높이/텍스트 폭 조정 */
+  .public-layout .practice-detail-hero-shell {
+    min-height: clamp(300px, 54vw, 400px);
+    padding-inline: clamp(0.75rem, 2vw, 1.3rem);
+  }
+
+  .public-layout .practice-hero-copy {
+    max-width: min(70%, 580px);
+  }
+
+  /* [수정] 2026-02-19: 태블릿에서도 상세 섹션 간 분리감을 유지하도록 간격을 확대 */
+  .public-layout .practice-detail-section {
+    margin-top: 1.65rem;
+    padding-top: 1.25rem;
+  }
+
+  .public-layout .practice-detail-cta {
+    margin-top: 2rem;
+  }
+
+  .public-layout .practice-scope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .practice-point-grid {
+    grid-template-columns: 1fr;
+    /* [수정] 2026-02-21: 태블릿에서도 핵심 수행 포인트 항목 간 간격을 넓혀 답답함 완화 */
+    gap: 1.6rem;
+  }
+
+  .public-layout .attorney-showcase {
+    /* [수정] 2026-02-19: 모바일 잘림 대응 실험값을 이전 간격으로 원복 */
+    padding-inline: clamp(2.4rem, 8vw, 3.6rem);
+  }
+
+  .public-layout .attorney-stage {
+    padding: 0.2rem clamp(2.1rem, 8vw, 4rem);
+  }
+
+  .public-layout .trust-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem 1.4rem;
+  }
+
+  .public-layout .process-list {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+  }
+
+  /* [수정] 2026-02-20: 태블릿에서 메인 하단 카드/신뢰/타임라인의 밀도를 유지하도록 반응형 조정 */
+  .public-layout .home-outcome-grid,
+  .public-layout .home-why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .home-process-number {
+    width: auto;
+    padding-inline: 0;
+    font-size: clamp(1.36rem, 1vw + 1rem, 1.85rem);
+  }
+
+  .public-layout .home-process-item::after {
+    top: calc(100% + (var(--home-process-gap) / 2) - 20px);
+    height: 40px;
+  }
+
+  .public-layout .home-process-copy {
+    margin-left: calc(50% + 42px);
+    width: min(500px, calc(50% - 46px));
+  }
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+@media (max-width: 767.98px) {
+  /* [수정] 2026-02-20: 모바일 권장값(scale 1.00 / focus 52% 30%) 적용 */
+  :root {
+    --hero-video-scale: 1;
+    --hero-video-focus-x: 52%;
+    --hero-video-focus-y: 30%;
+  }
+
+  .public-layout .home-process-section::before {
+    display: none;
+  }
+
+  .section-block {
+    padding: 3rem 0;
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 9vw, 2.5rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .public-layout .hero-actions {
+    gap: 0.55rem;
+  }
+
+  /* [수정] 2026-02-20: 모바일에서 메인 하단 섹션을 1열 중심으로 재배치해 가독성 확보 */
+  .public-layout .home-outcome-grid,
+  .public-layout .home-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .home-outcome-card,
+  .public-layout .home-why-item {
+    min-height: 0;
+  }
+
+  .public-layout .home-process-timeline {
+    padding-left: 0;
+    gap: 0.9rem;
+  }
+
+  .public-layout .home-process-timeline::before {
+    display: none;
+  }
+
+  .public-layout .home-process-item::after {
+    display: none;
+  }
+
+  .public-layout .home-process-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    border-top: 1px solid rgba(216, 192, 138, 0.2);
+    min-height: 0;
+    padding-top: 0.72rem;
+  }
+
+  .public-layout .home-process-item:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .public-layout .home-process-number {
+    position: static;
+    transform: none;
+    width: auto;
+    font-size: 1.42rem;
+    text-align: left;
+  }
+
+  .public-layout .home-process-copy {
+    margin-left: 0;
+    width: auto;
+    min-height: 0;
+  }
+
+  .btn-home-solid-gold {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* [수정] 2026-02-19: 모바일 상세 페이지 가독성을 위해 카드/타이포 간격 재조정 */
+  .public-layout .practice-detail-hero-shell {
+    min-height: clamp(272px, 72vw, 340px);
+    padding: 1rem 0.78rem 1.15rem;
+    margin-bottom: 1.45rem;
+  }
+
+  .public-layout .practice-hero-copy {
+    max-width: 100%;
+  }
+
+  /* [수정] 2026-02-19: 모바일 상세 섹션도 좁은 화면 대비 충분한 간격 확보 */
+  .public-layout .practice-detail-section {
+    margin-top: 1.35rem;
+    padding-top: 1.1rem;
+  }
+
+  .public-layout .practice-detail-title {
+    font-size: clamp(2rem, 11vw, 2.95rem);
+  }
+
+  .public-layout .practice-keyword-line {
+    gap: 0.28rem 0.62rem;
+  }
+
+  .public-layout .practice-scope-grid {
+    grid-template-columns: 1fr;
+    gap: 0.72rem;
+  }
+
+  .public-layout .practice-scope-item {
+    min-height: 0;
+    padding: 0.88rem 0.78rem;
+    gap: 0.54rem;
+  }
+
+  .public-layout .practice-scope-title {
+    line-height: 1.36;
+  }
+
+  .public-layout .practice-scope-desc {
+    line-height: 1.66;
+  }
+
+  .public-layout .practice-point-item {
+    /* [수정] 2026-02-21: 모바일 핵심 수행 포인트 간격을 확대해 가독성 개선 */
+    padding-left: 0.82rem;
+    gap: 0.84rem;
+    padding-top: 0.18rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .public-layout .practice-point-number {
+    font-size: clamp(1.62rem, 7vw, 2.05rem);
+  }
+
+  .public-layout .practice-point-title {
+    line-height: 1.38;
+  }
+
+  .public-layout .practice-point-desc {
+    line-height: 1.64;
+  }
+
+  .public-layout .practice-detail-cta {
+    margin-top: 1.75rem;
+    padding: 1.55rem 0.72rem 1.75rem;
+  }
+
+  .public-layout .practice-detail-cta-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  /* [수정] 2026-02-19: 모바일에서도 핵심 업무 분야를 2열로 유지하도록 변경 */
+  .public-layout .practice-showcase-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .practice-showcase-item {
+    min-height: clamp(184px, 46vw, 226px);
+    padding: 0.78rem 0.62rem 0.68rem;
+    gap: 0.32rem;
+  }
+
+  .public-layout .practice-showcase-title {
+    font-size: clamp(1.02rem, 2vw + 0.58rem, 1.24rem);
+  }
+
+  .public-layout .practice-showcase-desc {
+    font-size: clamp(0.72rem, 0.7vw + 0.58rem, 0.84rem);
+    line-height: 1.5;
+  }
+
+  .public-layout .practice-showcase-en {
+    font-size: clamp(0.66rem, 0.74vw + 0.54rem, 0.8rem);
+  }
+
+  .public-layout .practice-showcase-points {
+    font-size: clamp(0.72rem, 0.52vw + 0.62rem, 0.82rem);
+    padding-left: 0.85rem;
+    gap: 0.24rem;
+  }
+
+  .public-layout .practice-showcase-arrow {
+    font-size: 0.96rem;
+  }
+
+  .public-layout .attorney-stage {
+    /* [수정] 2026-02-19: 모바일에서 사선-이미지 간격과 소개글 간격 균형을 위해 높이/패딩 재조정 */
+    --attorney-image-h: clamp(236px, 76vw, 336px);
+    --attorney-line-h: calc(var(--attorney-image-h) + 34px);
+    min-height: calc(var(--attorney-line-h) + 22px);
+    padding: 0.16rem clamp(1.35rem, 5.2vw, 1.85rem) 0.18rem;
+  }
+
+  .public-layout .attorney-stage-line {
+    height: var(--attorney-line-h);
+  }
+
+  .public-layout .attorney-stage-line-left {
+    /* [수정] 2026-02-19: 모바일에서 사선이 이미지에 과도하게 붙지 않도록 위치/각도 보정 */
+    left: 0.82rem;
+    transform: translateY(-50%) rotate(20deg);
+  }
+
+  .public-layout .attorney-stage-line-right {
+    /* [수정] 2026-02-19: 모바일에서 사선이 이미지에 과도하게 붙지 않도록 위치/각도 보정 */
+    right: 0.82rem;
+    transform: translateY(-50%) rotate(20deg);
+  }
+
+  .public-layout .attorney-avatar {
+    width: 108px;
+    height: 108px;
+  }
+
+  /* [수정] 2026-02-19: 모바일에서도 이미지 영역을 더 크게 유지 */
+  .public-layout .attorney-avatar.has-image {
+    width: min(100%, 292px);
+    height: var(--attorney-image-h);
+  }
+
+  /* [수정] 2026-02-19: 모바일에서 소개글이 너무 멀어 보이지 않도록 프레임 밖 간격 축소 */
+  .public-layout .attorney-copy-track {
+    margin-top: 0.35rem;
+  }
+
+  .public-layout .attorney-avatar::before {
+    width: 46px;
+    height: 46px;
+  }
+
+  .public-layout .attorney-avatar::after {
+    width: 74px;
+    height: 50px;
+  }
+
+  .public-layout .attorney-avatar-arms {
+    top: 58px;
+    width: 52px;
+    height: 18px;
+  }
+
+  .public-layout .attorney-showcase {
+    /* [수정] 2026-02-19: 모바일 버튼을 예시처럼 '좌 버튼 - 소개글 - 우 버튼' 한 줄로 재배치 */
+    display: grid;
+    grid-template-columns: minmax(46px, auto) minmax(0, 1fr) minmax(46px, auto);
+    grid-template-areas:
+      "stage stage stage"
+      "prev copy next";
+    align-items: end;
+    row-gap: 0.4rem;
+    column-gap: 0.72rem;
+    padding-inline: 1.4rem;
+  }
+
+  .public-layout .attorney-stage {
+    grid-area: stage;
+  }
+
+  .public-layout .attorney-prev {
+    grid-area: prev;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .public-layout .attorney-next {
+    grid-area: next;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .public-layout .attorney-copy-track {
+    grid-area: copy;
+    /* [수정] 2026-02-19: 소개글을 버튼 행 중앙에 붙여 간격 과다를 해소 */
+    width: 100%;
+    margin-top: 0;
+    padding-inline: 0.1rem;
+  }
+
+  .public-layout .attorney-nav {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    z-index: 1;
+    animation: attorney-float-mobile 1.2s linear infinite alternate;
+  }
+
+  .public-layout .attorney-nav:hover,
+  .public-layout .attorney-nav:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .public-layout .attorney-nav:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  .public-layout .hero-btn {
+    min-width: 128px;
+    padding: 0.52rem 0.95rem;
+    font-size: clamp(0.82rem, 0.5vw + 0.72rem, 0.9rem);
+  }
+
+  .public-layout .line-list,
+  .public-layout .process-list,
+  .public-layout .trust-strip,
+  .public-layout .cta-banner,
+  .public-layout form.panel-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .public-layout .trust-strip {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .public-layout .line-item-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
+
+/* [수정] 2026-02-19: 기존 깨진 한글 주석 정리 */
+@media (max-width: 420px) {
+  .public-layout .hero-btn {
+    flex: 1 1 calc(50% - 0.55rem);
+    min-width: 0;
+  }
+}
+
+
+/* [수정] 2026-02-19: 변호사 상세 페이지 전면 개편 스타일(Hero/3카드/상세탭/매칭/CTA) 추가 */
+.public-layout .attorney-team-page {
+  position: relative;
+}
+
+.public-layout .attorney-team-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.2rem, 3vw, 2.6rem);
+  align-items: center;
+  padding: clamp(1.2rem, 2.8vw, 2.2rem) 0 clamp(1.3rem, 2.8vw, 2.3rem);
+  border-top: 1px solid rgba(216, 192, 138, 0.22);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.22);
+}
+
+.public-layout .attorney-team-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.92), transparent);
+}
+
+.public-layout .attorney-team-hero-copy .section-title {
+  margin-bottom: 0;
+}
+
+.public-layout .attorney-team-hero-visual {
+  position: relative;
+  min-height: clamp(236px, 32vw, 360px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  justify-items: center;
+  gap: clamp(0.5rem, 1.4vw, 1.1rem);
+  padding-bottom: 0.2rem;
+}
+
+.public-layout .attorney-team-silhouette {
+  position: relative;
+  margin: 0;
+  width: min(100%, clamp(126px, 13.4vw, 188px));
+  height: clamp(202px, 24vw, 298px);
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(216, 192, 138, 0.28);
+  box-shadow: 0 12px 24px rgba(2, 8, 18, 0.3);
+  background: linear-gradient(180deg, rgba(16, 24, 38, 0.72), rgba(10, 16, 30, 0.86));
+}
+
+.public-layout .attorney-team-silhouette img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+/* [수정] 2026-02-19: 좌우 인물의 딤/축소 효과를 제거해 3명 모두 동일 비중으로 강조 */
+.public-layout .attorney-team-silhouette.is-left,
+.public-layout .attorney-team-silhouette.is-right {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+/* [수정] 2026-02-19: 중앙 인물은 크기 과장 대신 골드 라인 포인트만 약하게 적용 */
+.public-layout .attorney-team-silhouette.is-center {
+  z-index: 2;
+  border-color: rgba(216, 192, 138, 0.56);
+  box-shadow: 0 0 0 1px rgba(216, 192, 138, 0.24), 0 14px 28px rgba(2, 8, 18, 0.34);
+}
+
+.public-layout .attorney-team-silhouette.is-left {
+  margin-right: 0;
+}
+
+.public-layout .attorney-team-silhouette.is-right {
+  margin-left: 0;
+}
+
+.public-layout .attorney-team-silhouette-line {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(216, 192, 138, 0.25), rgba(216, 192, 138, 0.08));
+}
+
+.public-layout .attorney-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: clamp(0.95rem, 2.2vw, 1.35rem);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.2);
+  padding-bottom: clamp(0.92rem, 1.8vw, 1.15rem);
+}
+
+.public-layout .attorney-hero-metric {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.52rem;
+  color: rgba(228, 220, 204, 0.94);
+  font-size: clamp(0.9rem, 0.28vw + 0.82rem, 1.02rem);
+  letter-spacing: 0.01em;
+}
+
+.public-layout .attorney-hero-metric i {
+  color: var(--line-gold);
+  font-size: 1rem;
+}
+
+.public-layout .attorney-grid-header,
+.public-layout .attorney-detail-header,
+.public-layout .attorney-matching-header {
+  max-width: 920px;
+}
+
+.public-layout .attorney-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+.public-layout .attorney-profile-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(18, 28, 45, 0.8), rgba(11, 19, 33, 0.82));
+  border: 1px solid rgba(216, 192, 138, 0.26);
+  border-radius: 14px;
+  padding: clamp(1rem, 1.8vw, 1.28rem);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+  cursor: pointer;
+}
+
+.public-layout .attorney-profile-card::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.9), transparent);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.public-layout .attorney-profile-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 192, 138, 0.54);
+}
+
+.public-layout .attorney-profile-card:hover::before {
+  opacity: 1;
+}
+
+.public-layout .attorney-card-grid.has-active .attorney-profile-card:not(.is-selected) {
+  opacity: 0.56;
+}
+
+.public-layout .attorney-profile-card.is-selected {
+  border-color: rgba(216, 192, 138, 0.82);
+  box-shadow: 0 0 0 1px rgba(216, 192, 138, 0.48), 0 16px 32px rgba(2, 8, 18, 0.42), 0 0 34px rgba(216, 192, 138, 0.16);
+}
+
+.public-layout .attorney-profile-card.is-selected::before {
+  opacity: 1;
+}
+
+.public-layout .attorney-profile-card:focus-visible {
+  outline: 1px solid rgba(216, 192, 138, 0.85);
+  outline-offset: 2px;
+}
+
+.public-layout .attorney-profile-media {
+  width: 100%;
+  height: clamp(210px, 28vw, 290px);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+  background: linear-gradient(180deg, rgba(14, 22, 38, 0.72), rgba(10, 16, 30, 0.86));
+}
+
+.public-layout .attorney-profile-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.public-layout .attorney-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.88rem;
+}
+
+.public-layout .attorney-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: rgba(233, 220, 194, 0.92);
+}
+
+.public-layout .attorney-headline {
+  color: rgba(244, 246, 251, 0.92);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  margin-top: auto;
+}
+
+.public-layout .attorney-card-actions {
+  margin-top: 1.05rem;
+  display: grid;
+  /* [수정] 2026-02-20: 변호사 카드 상담 버튼 제거에 맞춰 액션 영역을 단일 버튼 레이아웃으로 조정 */
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.public-layout .attorney-card-btn {
+  padding: 0.5rem 0.72rem;
+  font-size: 0.88rem;
+}
+
+.public-layout .attorney-detail-stack {
+  position: relative;
+}
+
+.public-layout .attorney-detail-panel {
+  display: none;
+  grid-template-columns: minmax(260px, 0.88fr) minmax(0, 1.12fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  border-top: 1px solid rgba(216, 192, 138, 0.26);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.2);
+  padding: clamp(1rem, 2.3vw, 1.85rem) 0;
+}
+
+.public-layout .attorney-detail-panel.is-active {
+  display: grid;
+}
+
+.public-layout .attorney-detail-image-wrap {
+  margin: 0;
+  height: clamp(330px, 42vw, 520px);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(15, 23, 38, 0.8), rgba(10, 18, 31, 0.88));
+}
+
+.public-layout .attorney-detail-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.public-layout .attorney-badge-wrap {
+  margin-top: 0.78rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.public-layout .attorney-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.2rem 0.62rem;
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  color: rgba(230, 220, 201, 0.9);
+  font-size: 0.8rem;
+}
+
+.public-layout .attorney-detail-name {
+  margin-bottom: 0.5rem;
+}
+
+.public-layout .attorney-detail-summary {
+  margin-bottom: 0.95rem;
+}
+
+.public-layout .attorney-detail-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.95rem;
+}
+
+.public-layout .attorney-tab-btn {
+  border: 1px solid rgba(216, 192, 138, 0.28);
+  background: rgba(18, 28, 45, 0.46);
+  color: var(--text-muted);
+  padding: 0.34rem 0.66rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.public-layout .attorney-tab-btn.is-active {
+  border-color: rgba(216, 192, 138, 0.78);
+  color: rgba(241, 232, 214, 0.96);
+  background: rgba(216, 192, 138, 0.12);
+}
+
+.public-layout .attorney-tab-panel {
+  display: none;
+}
+
+.public-layout .attorney-tab-panel.is-active {
+  display: block;
+}
+
+.public-layout .attorney-detail-list {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.52rem;
+}
+
+.public-layout .attorney-detail-list li {
+  color: rgba(233, 236, 244, 0.92);
+  line-height: 1.7;
+}
+
+.public-layout .attorney-case-cards {
+  display: grid;
+  gap: 0.62rem;
+}
+
+.public-layout .attorney-case-card {
+  border: 1px solid rgba(216, 192, 138, 0.22);
+  padding: 0.7rem 0.74rem;
+  background: rgba(216, 192, 138, 0.04);
+}
+
+.public-layout .attorney-case-title {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-title);
+  font-size: 1rem;
+  color: rgba(246, 238, 223, 0.94);
+}
+
+.public-layout .attorney-case-summary {
+  color: rgba(203, 210, 223, 0.92);
+  line-height: 1.62;
+}
+
+.public-layout .attorney-case-link {
+  display: inline-flex;
+  margin-top: 0.72rem;
+  font-size: 0.9rem;
+}
+
+.public-layout .attorney-timeline {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.66rem;
+}
+
+.public-layout .attorney-timeline-item {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 0.65rem;
+  padding-left: 0.68rem;
+  border-left: 1px solid rgba(216, 192, 138, 0.36);
+}
+
+.public-layout .attorney-timeline-year {
+  font-family: var(--font-title);
+  color: rgba(216, 192, 138, 0.9);
+  letter-spacing: 0.02em;
+}
+
+.public-layout .attorney-timeline-detail {
+  color: rgba(228, 233, 242, 0.93);
+  line-height: 1.62;
+}
+
+.public-layout .attorney-matching-grid {
+  display: grid;
+  gap: 0.62rem;
+}
+
+.public-layout .attorney-match-item {
+  width: 100%;
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background: linear-gradient(90deg, rgba(216, 192, 138, 0.06), rgba(18, 28, 45, 0.35));
+  color: rgba(236, 239, 246, 0.96);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.56rem;
+  padding: 0.72rem 0.82rem;
+  text-align: left;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.public-layout .attorney-match-item:hover {
+  border-color: rgba(216, 192, 138, 0.58);
+  background: linear-gradient(90deg, rgba(216, 192, 138, 0.12), rgba(18, 28, 45, 0.44));
+}
+
+.public-layout .attorney-match-check {
+  color: var(--line-gold);
+  font-weight: 700;
+}
+
+.public-layout .attorney-match-case {
+  font-weight: 500;
+}
+
+.public-layout .attorney-match-arrow {
+  color: rgba(216, 192, 138, 0.76);
+}
+
+.public-layout .attorney-match-result {
+  color: rgba(225, 218, 200, 0.96);
+  white-space: nowrap;
+}
+
+.public-layout .attorney-quick-cta {
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(216, 192, 138, 0.07), rgba(18, 28, 45, 0.86));
+  padding: clamp(1rem, 2.5vw, 1.8rem);
+}
+
+.public-layout .attorney-quick-form {
+  margin: 0;
+}
+
+.public-layout .attorney-quick-action {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.public-layout .attorney-quick-submit {
+  min-width: 220px;
+  border: 1px solid var(--line-gold);
+  background: var(--line-gold);
+  color: #0f182a;
+  font-weight: 700;
+  padding: 0.7rem 1.25rem;
+}
+
+.public-layout .attorney-quick-submit:hover,
+.public-layout .attorney-quick-submit:focus {
+  border-color: #e8d4a6;
+  background: #e8d4a6;
+  color: #0f182a;
+}
+
+.public-layout .attorney-quick-note {
+  color: rgba(220, 210, 188, 0.94);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1199.98px) {
+  .public-layout .attorney-profile-media {
+    height: clamp(198px, 30vw, 262px);
+  }
+
+  .public-layout .attorney-match-item {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "check case arrow"
+      "check result result";
+  }
+
+  .public-layout .attorney-match-check {
+    grid-area: check;
+  }
+
+  .public-layout .attorney-match-case {
+    grid-area: case;
+  }
+
+  .public-layout .attorney-match-arrow {
+    grid-area: arrow;
+  }
+
+  .public-layout .attorney-match-result {
+    grid-area: result;
+    padding-left: 0;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .public-layout .attorney-team-hero {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .public-layout .attorney-team-hero-copy {
+    text-align: center;
+  }
+
+  .public-layout .attorney-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .attorney-detail-panel,
+  .public-layout .attorney-detail-panel.is-active {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .attorney-detail-image-wrap {
+    height: clamp(280px, 66vw, 420px);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .public-layout .attorney-hero-metrics {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  /* [수정] 2026-02-19: 모바일에서도 3인 모두 균형 있게 보이도록 Hero 인물 영역 재조정 */
+  .public-layout .attorney-team-hero-visual {
+    min-height: clamp(196px, 54vw, 244px);
+    gap: 0.45rem;
+  }
+
+  .public-layout .attorney-team-silhouette {
+    width: min(100%, 138px);
+    height: clamp(170px, 44vw, 220px);
+  }
+
+  .public-layout .attorney-team-silhouette.is-left,
+  .public-layout .attorney-team-silhouette.is-right {
+    opacity: 1;
+    transform: none;
+  }
+
+  .public-layout .attorney-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .attorney-card-grid.has-active .attorney-profile-card:not(.is-selected) {
+    opacity: 0.8;
+  }
+
+  .public-layout .attorney-profile-media {
+    height: clamp(238px, 62vw, 302px);
+  }
+
+  .public-layout .attorney-card-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .attorney-tab-btn {
+    font-size: 0.78rem;
+  }
+
+  .public-layout .attorney-match-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "check case"
+      "arrow result";
+  }
+
+  .public-layout .attorney-match-arrow {
+    justify-self: center;
+  }
+
+  .public-layout .attorney-quick-submit {
+    width: 100%;
+  }
+
+  .public-layout .attorney-quick-action {
+    gap: 0.55rem;
+  }
+}
+/* [수정] 2026-02-19: About 페이지 레퍼런스 기반 다크 프리미엄 섹션 스타일 추가 */
+.public-layout .about-premium-page {
+  position: relative;
+}
+
+.public-layout .about-hero-panel,
+.public-layout .about-value-panel,
+.public-layout .about-cta-panel {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(216, 192, 138, 0.24);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.24);
+  background:
+    radial-gradient(66rem 28rem at 18% 24%, rgba(216, 146, 76, 0.22), transparent 72%),
+    radial-gradient(50rem 28rem at 84% 34%, rgba(216, 192, 138, 0.16), transparent 70%),
+    linear-gradient(118deg, rgba(8, 13, 24, 0.9) 0%, rgba(14, 20, 32, 0.84) 56%, rgba(18, 24, 35, 0.78) 100%);
+}
+
+.public-layout .about-hero-panel::before,
+.public-layout .about-value-panel::before,
+.public-layout .about-cta-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 206, 132, 0.06) 1px, transparent 1.25px),
+    radial-gradient(circle, rgba(255, 206, 132, 0.03) 1px, transparent 1.25px);
+  background-size: 74px 74px, 46px 46px;
+  background-position: 0 0, 24px 14px;
+  pointer-events: none;
+  opacity: 0.24;
+}
+
+.public-layout .about-hero-main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* [수정] 2026-02-20: About 비주얼 영역 삭제에 맞춰 Hero 레이아웃을 1열로 전환 */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: center;
+  padding: clamp(1.35rem, 2.8vw, 2.3rem) clamp(0.9rem, 2vw, 1.4rem) 1.25rem;
+}
+
+.public-layout .about-hero-title {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.12;
+  margin-bottom: 0.8rem;
+}
+
+.public-layout .about-hero-summary {
+  color: rgba(236, 224, 205, 0.95);
+  font-size: clamp(0.98rem, 0.52vw + 0.84rem, 1.16rem);
+  line-height: 1.7;
+}
+
+/* [수정] 2026-02-20: About Hero의 이미지 영역을 제거하고 텍스트/라인 기반 사이드 패널로 교체 */
+.public-layout .about-hero-side {
+  min-height: clamp(220px, 30vw, 340px);
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background:
+    radial-gradient(32rem 20rem at 80% 20%, rgba(216, 160, 90, 0.14), transparent 70%),
+    linear-gradient(135deg, rgba(13, 21, 35, 0.72), rgba(10, 17, 31, 0.86));
+  padding: clamp(1rem, 2vw, 1.45rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.public-layout .about-hero-side-title {
+  color: rgba(242, 223, 184, 0.95);
+  font-family: var(--font-title);
+  font-size: clamp(1.02rem, 0.8vw + 0.84rem, 1.36rem);
+  letter-spacing: 0.09em;
+}
+
+.public-layout .about-hero-side-lines {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.public-layout .about-hero-side-lines span {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(216, 192, 138, 0.2), rgba(216, 192, 138, 0.85), rgba(216, 192, 138, 0.2));
+}
+
+.public-layout .about-hero-side-text {
+  color: rgba(217, 216, 213, 0.9);
+  line-height: 1.7;
+  font-size: clamp(0.9rem, 0.3vw + 0.82rem, 1rem);
+}
+
+.public-layout .about-hero-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.72rem;
+  border-top: 1px solid rgba(216, 192, 138, 0.25);
+  padding: 0.95rem clamp(0.9rem, 2vw, 1.4rem) clamp(1.1rem, 2.1vw, 1.35rem);
+}
+
+.public-layout .about-hero-metric {
+  padding: 0.2rem 0.82rem;
+  border-left: 1px solid rgba(216, 192, 138, 0.2);
+}
+
+.public-layout .about-hero-metric:first-child {
+  border-left: 0;
+}
+
+.public-layout .about-metric-value {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  color: rgba(241, 219, 176, 0.95);
+  line-height: 1;
+}
+
+.public-layout .about-metric-label {
+  color: rgba(220, 214, 201, 0.92);
+  line-height: 1.56;
+  font-size: clamp(0.86rem, 0.3vw + 0.78rem, 0.98rem);
+}
+
+.public-layout .about-value-panel {
+  display: grid;
+  /* [수정] 2026-02-20: About 이미지 영역 제거에 따라 가치 섹션도 1열 본문 레이아웃으로 정리 */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  padding: clamp(1.25rem, 2.8vw, 2.2rem) clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.public-layout .about-value-copy,
+.public-layout .about-value-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.public-layout .about-value-list {
+  margin: 0 0 1rem;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.54rem;
+}
+
+.public-layout .about-value-list li {
+  position: relative;
+  padding-left: 1.85rem;
+  color: rgba(240, 236, 226, 0.94);
+  line-height: 1.64;
+}
+
+.public-layout .about-value-list li::before {
+  content: "\f26a";
+  font-family: "bootstrap-icons";
+  position: absolute;
+  left: 0;
+  top: 0.08rem;
+  color: var(--line-gold);
+}
+
+.public-layout .about-value-caption {
+  color: rgba(201, 199, 194, 0.92);
+  font-size: 0.92rem;
+  line-height: 1.66;
+}
+
+.public-layout .about-value-visual {
+  border: 1px solid rgba(216, 192, 138, 0.22);
+  background:
+    radial-gradient(34rem 18rem at 82% 18%, rgba(216, 160, 90, 0.13), transparent 72%),
+    linear-gradient(110deg, rgba(5, 10, 21, 0.72), rgba(5, 10, 21, 0.32));
+  min-height: clamp(270px, 34vw, 420px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: clamp(1rem, 2vw, 1.3rem);
+}
+
+.public-layout .about-value-brand {
+  font-family: var(--font-title);
+  color: rgba(240, 223, 190, 0.95);
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  letter-spacing: 0.02em;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.44);
+}
+
+.public-layout .about-strength-header {
+  max-width: 940px;
+}
+
+.public-layout .about-strength-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1.05rem);
+}
+
+.public-layout .about-strength-card {
+  border: 1px solid rgba(216, 192, 138, 0.3);
+  background:
+    radial-gradient(circle at 72% 18%, rgba(216, 161, 93, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(15, 22, 37, 0.74), rgba(10, 17, 30, 0.86));
+  padding: clamp(1rem, 1.8vw, 1.25rem);
+  min-height: 100%;
+}
+
+.public-layout .about-strength-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(216, 192, 138, 0.42);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.72rem;
+}
+
+.public-layout .about-strength-icon-wrap i {
+  font-size: 1.26rem;
+  color: rgba(238, 214, 167, 0.95);
+}
+
+.public-layout .about-strength-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 0.6vw + 0.96rem, 1.42rem);
+  line-height: 1.44;
+  margin-bottom: 0.6rem;
+}
+
+.public-layout .about-strength-desc {
+  color: rgba(214, 214, 216, 0.93);
+  line-height: 1.66;
+  margin-bottom: 0.7rem;
+}
+
+.public-layout .about-strength-chip {
+  color: rgba(237, 216, 174, 0.95);
+  border: 1px solid rgba(216, 192, 138, 0.42);
+  padding: 0.3rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: 0.86rem;
+}
+
+/* [수정] 2026-02-21: About History 타임라인(중앙 골드 라인 + 좌우 연혁 카드) 스타일 추가 */
+.public-layout .about-history-header {
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.public-layout .about-history-timeline {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.25rem 0 0.1rem;
+}
+
+.public-layout .about-history-timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(216, 192, 138, 0.1) 0%,
+    rgba(216, 192, 138, 0.66) 24%,
+    rgba(216, 192, 138, 0.66) 76%,
+    rgba(216, 192, 138, 0.1) 100%
+  );
+  transform: translateX(-50%);
+}
+
+.public-layout .about-history-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+  align-items: center;
+  min-height: 116px;
+}
+
+.public-layout .about-history-content {
+  max-width: 340px;
+}
+
+.public-layout .about-history-item.is-left .about-history-content {
+  grid-column: 1;
+  margin-left: auto;
+  text-align: right;
+  padding-right: 0.95rem;
+}
+
+.public-layout .about-history-item.is-right .about-history-content {
+  grid-column: 3;
+  margin-right: auto;
+  text-align: left;
+  padding-left: 0.95rem;
+}
+
+.public-layout .about-history-node {
+  grid-column: 2;
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #0b1426;
+  border: 2px solid rgba(216, 192, 138, 0.92);
+  box-shadow: 0 0 0 3px rgba(216, 192, 138, 0.15);
+}
+
+.public-layout .about-history-item:first-child .about-history-node {
+  width: 13px;
+  height: 13px;
+  box-shadow:
+    0 0 0 3px rgba(216, 192, 138, 0.2),
+    0 0 20px rgba(216, 192, 138, 0.28);
+}
+
+.public-layout .about-history-year {
+  font-family: var(--font-title);
+  font-size: clamp(1.2rem, 1.4vw, 1.7rem);
+  color: rgba(242, 223, 185, 0.96);
+  line-height: 1.14;
+}
+
+.public-layout .about-history-title {
+  font-family: var(--font-title);
+  font-size: clamp(0.98rem, 0.55vw + 0.84rem, 1.2rem);
+  color: rgba(235, 234, 231, 0.98);
+  line-height: 1.5;
+}
+
+.public-layout .about-history-detail {
+  color: rgba(198, 202, 210, 0.94);
+  line-height: 1.66;
+  font-size: clamp(0.88rem, 0.28vw + 0.8rem, 0.98rem);
+}
+
+.public-layout .about-cta-panel {
+  text-align: center;
+  padding: clamp(1.8rem, 3vw, 2.6rem) clamp(0.9rem, 2vw, 1.3rem);
+}
+
+.public-layout .about-cta-panel .btn {
+  min-width: 240px;
+}
+
+@media (max-width: 991.98px) {
+  .public-layout .about-hero-main,
+  .public-layout .about-value-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .about-hero-copy,
+  .public-layout .about-strength-header {
+    text-align: center;
+  }
+
+  .public-layout .about-strength-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-layout .about-history-item {
+    min-height: 106px;
+  }
+
+  .public-layout .about-history-content {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .public-layout .about-hero-metrics {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .public-layout .about-hero-metric {
+    border-left: 0;
+    border-top: 1px solid rgba(216, 192, 138, 0.2);
+    padding: 0.6rem 0;
+  }
+
+  .public-layout .about-hero-metric:first-child {
+    border-top: 0;
+  }
+
+  .public-layout .about-strength-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .about-history-timeline {
+    gap: 0.75rem;
+    padding-left: 0.1rem;
+  }
+
+  .public-layout .about-history-timeline::before {
+    left: 12px;
+    transform: none;
+  }
+
+  .public-layout .about-history-item {
+    grid-template-columns: 24px minmax(0, 1fr);
+    min-height: 0;
+    gap: 0.58rem;
+  }
+
+  .public-layout .about-history-node {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .public-layout .about-history-item:first-child .about-history-node {
+    margin-top: 0.15rem;
+  }
+
+  .public-layout .about-history-item.is-left .about-history-content,
+  .public-layout .about-history-item.is-right .about-history-content {
+    grid-column: 2;
+    margin: 0;
+    max-width: 100%;
+    text-align: left;
+    padding: 0;
+  }
+
+  .public-layout .about-cta-panel .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+/* [수정] 2026-02-20: 성공사례 페이지 전용 신뢰 중심 레이아웃/필터/카드/상세 스타일 추가 */
+.public-layout .cases-hub-page {
+  position: relative;
+}
+
+.public-layout .cases-hub-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70rem 40rem at 18% 12%, rgba(216, 146, 76, 0.18), transparent 74%),
+    radial-gradient(66rem 42rem at 82% 46%, rgba(216, 176, 108, 0.12), transparent 78%),
+    linear-gradient(180deg, rgba(8, 13, 24, 0.05), rgba(8, 13, 24, 0.16));
+  pointer-events: none;
+}
+
+.public-layout .cases-hub-page > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.public-layout .cases-hub-hero {
+  position: relative;
+  /* [수정] 2026-02-20: Hero 이미지를 전체 배경으로 노출하도록 레이어 구성 변경 */
+  border-top: 1px solid rgba(216, 192, 138, 0.25);
+  border-bottom: 1px solid rgba(216, 192, 138, 0.25);
+  background:
+    linear-gradient(110deg, rgba(8, 13, 24, 0.78) 0%, rgba(8, 13, 24, 0.68) 34%, rgba(8, 13, 24, 0.84) 100%),
+    radial-gradient(circle at 30% 42%, rgba(216, 192, 138, 0.2), transparent 56%),
+    var(--cases-hero-image, url("/static/uploads/cases_hero.png"));
+  background-size: cover;
+  background-position: center center;
+  overflow: hidden;
+}
+
+.public-layout .cases-hub-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 205, 138, 0.06) 1px, transparent 1.3px),
+    radial-gradient(circle, rgba(255, 205, 138, 0.02) 1px, transparent 1.3px);
+  background-size: 82px 82px, 48px 48px;
+  background-position: 0 0, 24px 16px;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.public-layout .cases-hub-hero-copy {
+  position: relative;
+  z-index: 1;
+  width: min(62%, 700px);
+  padding: clamp(1.3rem, 2.8vw, 2rem) clamp(0.95rem, 2vw, 1.5rem) clamp(0.9rem, 2vw, 1.2rem);
+}
+
+.public-layout .cases-hub-title {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.public-layout .cases-hub-hero-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid rgba(216, 192, 138, 0.22);
+  padding: 0.82rem clamp(0.95rem, 2vw, 1.5rem);
+}
+
+.public-layout .cases-hub-metric {
+  padding: 0.45rem 1rem;
+  border-left: 1px solid rgba(216, 192, 138, 0.2);
+}
+
+.public-layout .cases-hub-metric:first-child {
+  border-left: 0;
+}
+
+.public-layout .cases-hub-metric-value {
+  font-family: var(--font-title);
+  font-size: clamp(1.7rem, 3.1vw, 2.8rem);
+  color: rgba(240, 221, 184, 0.95);
+  line-height: 1;
+}
+
+.public-layout .cases-hub-metric-label {
+  color: rgba(218, 214, 204, 0.92);
+  font-size: clamp(0.84rem, 0.3vw + 0.76rem, 0.96rem);
+  line-height: 1.55;
+}
+
+.public-layout .cases-hub-filter {
+  position: sticky;
+  top: calc(var(--site-header-height) + 0.65rem);
+  z-index: 24;
+  margin-top: 0.95rem;
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background: rgba(10, 18, 32, 0.82);
+  backdrop-filter: blur(8px);
+  padding: 0.82rem;
+}
+
+.public-layout .cases-hub-filter-row {
+  display: grid;
+  /* [수정] 2026-02-20: 필터 항목을 사건 성질 중심으로 단순화(카테고리 + 검색) */
+  grid-template-columns: 1fr minmax(240px, 360px);
+  gap: 0.72rem;
+  align-items: center;
+}
+
+.public-layout .cases-hub-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+}
+
+.public-layout .cases-hub-pill {
+  border: 1px solid rgba(216, 192, 138, 0.28);
+  background: rgba(216, 192, 138, 0.04);
+  color: rgba(220, 220, 220, 0.92);
+  border-radius: 999px;
+  min-height: 34px;
+  padding: 0.22rem 0.74rem;
+  font-size: 0.86rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.public-layout .cases-hub-pill:hover {
+  border-color: rgba(216, 192, 138, 0.62);
+}
+
+.public-layout .cases-hub-pill.is-active {
+  border-color: rgba(216, 192, 138, 0.88);
+  background: rgba(216, 192, 138, 0.14);
+  color: rgba(245, 232, 206, 0.98);
+}
+
+.public-layout .cases-hub-search {
+  position: relative;
+  display: block;
+}
+
+.public-layout .cases-hub-search input {
+  padding-right: 2.2rem;
+}
+
+.public-layout .cases-hub-search input::placeholder {
+  /* [수정] 2026-02-20: 성공사례 검색 placeholder 가독성 향상을 위해 명도/투명도 상향 */
+  color: rgba(222, 228, 238, 0.88);
+  opacity: 1;
+}
+
+.public-layout .cases-hub-search i {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(216, 192, 138, 0.92);
+}
+
+.public-layout .cases-hub-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  /* [수정] 2026-02-20: 상세 토글 시 같은 행 다른 카드가 함께 늘어나지 않도록 상단 정렬로 고정 */
+  align-items: start;
+}
+
+.public-layout .cases-hub-card {
+  position: relative;
+  border: 1px solid rgba(216, 192, 138, 0.26);
+  background:
+    radial-gradient(circle at 76% 16%, rgba(216, 160, 90, 0.15), transparent 56%),
+    linear-gradient(180deg, rgba(14, 22, 37, 0.76), rgba(10, 17, 31, 0.88));
+  padding: 0.92rem;
+  /* [수정] 2026-02-20: grid stretch 높이 영향 제거로 클릭한 카드만 자연스럽게 확장 */
+  min-height: 0;
+  align-self: start;
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.public-layout .cases-hub-card::before {
+  content: "";
+  position: absolute;
+  left: 0.92rem;
+  right: 0.92rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 192, 138, 0.92), transparent);
+  transform: scaleX(0.2);
+  opacity: 0;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.public-layout .cases-hub-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 192, 138, 0.6);
+  box-shadow: 0 12px 26px rgba(2, 8, 18, 0.34);
+}
+
+.public-layout .cases-hub-card:hover::before {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.public-layout .cases-hub-card.is-hidden {
+  display: none;
+}
+
+.public-layout .cases-hub-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.72rem;
+}
+
+.public-layout .cases-hub-tag,
+.public-layout .cases-hub-outcome-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  color: rgba(240, 226, 197, 0.94);
+  font-size: 0.78rem;
+  padding: 0.12rem 0.52rem;
+}
+
+.public-layout .cases-hub-outcome-tag {
+  color: rgba(232, 205, 154, 0.95);
+}
+
+.public-layout .cases-hub-card-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.2rem, 0.95vw + 0.98rem, 1.7rem);
+  line-height: 1.36;
+  margin: 0 0 0.62rem;
+}
+
+.public-layout .cases-hub-card-summary {
+  color: rgba(224, 224, 224, 0.92);
+  line-height: 1.68;
+  margin: 0 0 0.82rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.public-layout .cases-hub-result-box {
+  border: 1px solid rgba(216, 192, 138, 0.44);
+  background: rgba(216, 192, 138, 0.07);
+  padding: 0.62rem 0.68rem;
+  box-shadow: inset 0 0 14px rgba(216, 192, 138, 0.08), 0 0 18px rgba(216, 192, 138, 0.08);
+}
+
+.public-layout .cases-hub-result-label {
+  color: rgba(218, 196, 154, 0.86);
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.public-layout .cases-hub-result-text {
+  font-family: var(--font-title);
+  color: rgba(247, 230, 190, 0.98);
+  font-size: clamp(1rem, 0.48vw + 0.88rem, 1.28rem);
+  line-height: 1.35;
+}
+
+.public-layout .cases-hub-detail-toggle {
+  margin-top: 0.8rem;
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid rgba(216, 192, 138, 0.34);
+  background: transparent;
+  color: rgba(236, 223, 196, 0.95);
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+}
+
+.public-layout .cases-hub-detail {
+  margin-top: 0.82rem;
+  border-top: 1px solid rgba(216, 192, 138, 0.24);
+  padding-top: 0.72rem;
+}
+
+.public-layout .cases-hub-detail-block {
+  margin-bottom: 0.75rem;
+}
+
+.public-layout .cases-hub-detail-block h3 {
+  font-family: var(--font-title);
+  font-size: 1.02rem;
+  margin: 0 0 0.3rem;
+}
+
+.public-layout .cases-hub-detail-block p {
+  color: rgba(228, 229, 231, 0.92);
+  line-height: 1.65;
+  margin-bottom: 0.28rem;
+}
+
+.public-layout .cases-hub-detail-block strong {
+  color: rgba(240, 228, 203, 0.96);
+  margin-right: 0.22rem;
+}
+
+.public-layout .cases-hub-strategy-box {
+  margin-top: 0.52rem;
+  border: 1px solid rgba(216, 192, 138, 0.46);
+  background: rgba(216, 192, 138, 0.08);
+  padding: 0.58rem 0.65rem;
+}
+
+.public-layout .cases-hub-strategy-title {
+  color: rgba(243, 227, 195, 0.97);
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+}
+
+.public-layout .cases-hub-strategy-box ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.24rem;
+}
+
+.public-layout .cases-hub-strategy-box li {
+  color: rgba(233, 232, 230, 0.94);
+  line-height: 1.6;
+}
+
+.public-layout .cases-hub-empty {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(216, 192, 138, 0.24);
+  background: linear-gradient(120deg, rgba(216, 192, 138, 0.08), rgba(12, 20, 33, 0.74));
+  text-align: center;
+  padding: clamp(1.2rem, 2.2vw, 1.7rem) 1rem;
+}
+
+.public-layout .case-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.public-layout .case-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1199.98px) {
+  .public-layout .cases-hub-filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .cases-hub-search {
+    max-width: 420px;
+  }
+
+  .public-layout .cases-hub-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991.98px) {
+  .public-layout .cases-hub-hero-copy {
+    width: 100%;
+    padding-right: clamp(0.95rem, 2vw, 1.5rem);
+  }
+
+  .public-layout .cases-hub-hero-metrics {
+    grid-template-columns: 1fr;
+    gap: 0.22rem;
+  }
+
+  .public-layout .cases-hub-metric {
+    border-left: 0;
+    border-top: 1px solid rgba(216, 192, 138, 0.18);
+    padding-left: 0;
+  }
+
+  .public-layout .cases-hub-metric:first-child {
+    border-top: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .public-layout .cases-hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-layout .cases-hub-card-title {
+    font-size: 1.22rem;
+  }
+
+  .public-layout .cases-hub-filter {
+    top: calc(var(--site-header-height) + 0.35rem);
+    padding: 0.62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-layout .case-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

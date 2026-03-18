@@ -1,0 +1,15 @@
+# [수정] 2026-02-18: 개발 산출물/비밀정보 제외 규칙 추가
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.env
+local.db
+instance/
+migrations/__pycache__/
+
+app/static/uploads/*
+!app/static/uploads/.gitkeep
