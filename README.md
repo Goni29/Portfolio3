@@ -1,54 +1,36 @@
-# Portfolio3 - 법무법인 웹사이트 MVP
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-<!-- [수정] 2026-02-18: Flask SSR 기반 MVP 실행/구성 문서 추가 -->
+## Getting Started
 
-Flask(Jinja2) 기반 한국 법무법인 웹사이트 MVP입니다. 퍼블릭 페이지와 관리자 포털(`/admin`)을 포함합니다.
+First, run the development server:
 
-## 기술 스택
-
-- Python 3.11+
-- Flask
-- Flask-SQLAlchemy
-- Flask-Migrate
-- Flask-Login
-- Flask-WTF (CSRF)
-- Flask-Limiter
-- Bootstrap 5 + 커스텀 다크 프리미엄 테마
-- SQLite(개발), PostgreSQL(DATABASE_URL) 대응
-
-## 빠른 실행 (PowerShell)
-
-```powershell
-cd .\Portfolio3
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-copy .env.example .env
-flask --app run.py db init
-flask --app run.py db migrate
-flask --app run.py db upgrade
-flask --app run.py seed-admin
-pytest -q
-flask --app run.py run
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-`Activate.ps1` 실행이 막히면:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 주요 경로
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- 퍼블릭: `/`, `/about`, `/attorneys`, `/practice`, `/cases`, `/blog`, `/blog/<slug>`, `/consult`
-- 관리자: `/admin/login`, `/admin`, `/admin/inquiries`, `/admin/posts`, `/admin/cases`
+## Learn More
 
-## 관리자 시드 계정
+To learn more about Next.js, take a look at the following resources:
 
-- `ADMIN_EMAIL`, `ADMIN_PASSWORD`를 `.env`에 설정 후:
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-```powershell
-flask --app run.py seed-admin
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-환경변수가 비어 있으면 명령이 종료 코드 `1`로 중단됩니다.
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
