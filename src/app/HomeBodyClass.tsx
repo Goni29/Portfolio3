@@ -14,14 +14,5 @@ export default function HomeBodyClass() {
     }
   }, [pathname]);
 
-  // Re-initialize main.js behaviors on route change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      window.dispatchEvent(new Event("DOMContentLoaded"));
-      window.dispatchEvent(new Event("load"));
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [pathname]);
-
   return null;
 }

@@ -1,7 +1,9 @@
 ﻿// [수정] 2026-02-19: 공통 스크립트(헤더 높이 동기화/카운트업/홈 슬라이더/변호사 상세 인터랙션) 통합 정리
 // [수정] 2026-02-20: Footer 지도를 embed iframe 방식으로 전환해 Google JS 초기화 로직 제거
 
-window.addEventListener("DOMContentLoaded", () => {
+function boot() {
+  if (window.__PLF_BOOTED) return;
+  window.__PLF_BOOTED = true;
   // [수정] 2026-02-19: Hero가 Navbar를 제외한 높이를 채우도록 헤더 높이를 CSS 변수에 반영
   const syncHeaderHeight = () => {
     const header = document.querySelector(".site-header");
@@ -665,4 +667,11 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-});
+}
+
+window.addEventListener("DOMContentLoaded", boot);
+
+// Safety net: if DOMContentLoaded already fired before this script loaded, run boot now
+if (document.readyState !== "loading") {
+  boot();
+}
