@@ -74,6 +74,10 @@ def create_app(config_object: type[Config] = Config) -> Flask:
 
     register_cli_commands(app)
 
+    with app.app_context():
+        from app.models import User, Case, Inquiry, Post  # noqa: F401
+        db.create_all()
+
     return app
 
 
